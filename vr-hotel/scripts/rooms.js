@@ -1,4 +1,4 @@
-// Sample rooms data
+﻿// Sample rooms data
 let rooms = [
     {
         id: 1,
@@ -217,7 +217,7 @@ function showSuccess(message) {
 // Logout
 function logout() {
     if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     }
 }
 

@@ -1,4 +1,4 @@
-// Authentication and Permission Management System
+﻿// Authentication and Permission Management System
 
 const Auth = (function() {
     // User accounts with permissions
@@ -65,17 +65,17 @@ const Auth = (function() {
         localStorage.removeItem('auth_session');
         sessionStorage.removeItem('auth_session');
         
-        // Determine the correct path to login.html
+        // Determine the correct path to index.html
         // Check if we're in a subdirectory (vr-hotel or travel-link)
         const path = window.location.pathname;
         const isInSubfolder = path.includes('vr-hotel') || path.includes('travel-link');
         
         if (isInSubfolder) {
             // We're in vr-hotel/ or travel-link/, go up one level
-            window.location.href = '../login.html';
+            window.location.href = '../index.html';
         } else {
             // We're already in the root dashboard folder
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
     }
 
@@ -112,9 +112,9 @@ const Auth = (function() {
             const isInSubfolder = path.includes('vr-hotel') || path.includes('travel-link');
             
             if (isInSubfolder) {
-                window.location.href = '../login.html';
+                window.location.href = '../index.html';
             } else {
-                window.location.href = 'login.html';
+                window.location.href = 'index.html';
             }
             return false;
         }
@@ -131,9 +131,9 @@ const Auth = (function() {
                 const isInSubfolder = path.includes('vr-hotel') || path.includes('travel-link');
                 
                 if (isInSubfolder) {
-                    window.location.href = '../login.html';
+                    window.location.href = '../index.html';
                 } else {
-                    window.location.href = 'login.html';
+                    window.location.href = 'index.html';
                 }
             }, 100);
             return false;

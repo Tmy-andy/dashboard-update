@@ -1,4 +1,4 @@
-// Sample dining data
+﻿// Sample dining data
 let dinings = [
     {
         id: 1,
@@ -231,7 +231,7 @@ function showSuccess(message) {
 // Logout
 function logout() {
     if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     }
 }
 
