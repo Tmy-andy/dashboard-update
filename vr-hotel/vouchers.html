@@ -1,0 +1,420 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offers - Link Hotel VR360 Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="styles/admin.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-hotel"></i></div>
+                <div class="logo-text">Link Hotel VR</div>
+            </div>
+        </div>
+        <div class="property-selector">
+            <div class="property-label">Khách sạn hiện tại</div>
+            <div class="property-name">Link Hotel VR360</div>
+        </div>
+        
+        <!-- Dashboard Switcher will be injected here -->
+        <div id="dashboard-switcher-container"></div>
+
+        <nav class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title">MANAGEMENT</div>
+                <a href="index.html" class="nav-item"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="introduction.html" class="nav-item"><i class="fas fa-info-circle"></i> Introduction</a>
+                <a href="rooms.html" class="nav-item"><i class="fas fa-bed"></i> Rooms</a>
+                <a href="dining.html" class="nav-item"><i class="fas fa-utensils"></i> Dining</a>
+                <a href="vouchers.html" class="nav-item active"><i class="fas fa-ticket-alt"></i> Offers</a>
+                <a href="facilities.html" class="nav-item"><i class="fas fa-swimming-pool"></i> Facilities</a>
+                <a href="policies.html" class="nav-item"><i class="fas fa-file-contract"></i> Policies</a>
+                <a href="rules.html" class="nav-item"><i class="fas fa-book-open"></i> Rules</a>
+                <a href="contact.html" class="nav-item"><i class="fas fa-phone"></i> Contact</a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">SETTINGS</div>
+                <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i> Settings</a>
+                <a href="https://hotel-vr-demo.netlify.app/" class="nav-item" target="_blank"><i class="fas fa-eye"></i>
+                    View Website</a>
+                <a href="#" class="nav-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <h1 class="page-title">Offers</h1>
+        </div>
+        <div class="header-right">
+            <div class="user-menu">
+                <div class="user-avatar">AD</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="alert alert-success hidden" id="successAlert">
+            <i class="fas fa-check-circle"></i>
+            <span id="successMessage">Đã lưu thành công!</span>
+        </div>
+
+        <!-- Status Card -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title">Display Status - Section Offers</div>
+                <div class="toggle-container">
+                    <span class="toggle-status active" id="sectionStatus">Đang hiển thị</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="sectionToggle" checked onchange="toggleSection()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vouchers List -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title">List Offers / Voucher</div>
+                <button class="btn btn-primary" onclick="addVoucher()">
+                    <i class="fas fa-plus"></i> Thêm Offers mới
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="vouchersList"></div>
+            </div>
+        </div>
+
+        <!-- Voucher Edit Modal -->
+        <div class="modal" id="voucherModal" style="display: none;">
+            <div class="modal-content" style="max-width: 800px;">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Thêm Offers mới</h3>
+                    <button class="close-btn" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="language-tabs">
+                        <button class="language-tab active" onclick="switchLang('vi')">Tiếng Việt</button>
+                        <button class="language-tab" onclick="switchLang('en')">English</button>
+                    </div>
+
+                    <!-- Vietnamese Content -->
+                    <div class="lang-content active" id="lang-vi">
+                        <div class="form-group">
+                            <label class="form-label">Tên Offers (VI) <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="nameVi" placeholder="VD: Giảm 20% cuối tuần">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Mô tả (VI)</label>
+                            <textarea class="form-textarea" id="descVi" rows="2"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Điều kiện áp dụng (VI)</label>
+                            <textarea class="form-textarea" id="termsVi" rows="3"
+                                placeholder="VD: Áp dụng cho Bookings từ 2 đêm trở lên"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- English Content -->
+                    <div class="lang-content" id="lang-en">
+                        <div class="form-group">
+                            <label class="form-label">Offer Name (EN) <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="nameEn"
+                                placeholder="E.g: 20% Off Weekend Special">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description (EN)</label>
+                            <textarea class="form-textarea" id="descEn" rows="2"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Terms & Conditions (EN)</label>
+                            <textarea class="form-textarea" id="termsEn" rows="3"
+                                placeholder="E.g: Valid for bookings of 2 nights or more"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Mã voucher</label>
+                            <input type="text" class="form-input" id="voucherCode" placeholder="SUMMER2026"
+                                style="text-transform: uppercase;">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Loại giảm giá</label>
+                            <select class="form-select" id="discountType" onchange="updateDiscountLabel()">
+                                <option value="percentage">Phần trăm (%)</option>
+                                <option value="fixed">Số tiền cố định (VNĐ)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" id="discountLabel">Giá trị giảm (%)</label>
+                            <input type="number" class="form-input" id="discountValue" placeholder="20">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Ngày bắt đầu</label>
+                            <input type="date" class="form-input" id="startDate">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Ngày kết thúc</label>
+                            <input type="date" class="form-input" id="endDate">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Số lượng voucher</label>
+                            <input type="number" class="form-input" id="quantity" placeholder="100">
+                            <p class="form-help">Để trống nếu không giới hạn</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="toggle-container">
+                            <input type="checkbox" id="voucherActive" checked>
+                            <span>Kích hoạt voucher này</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeModal()">Hủy</button>
+                    <button class="btn btn-primary" onclick="saveVoucher()">Lưu Offers</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let vouchers = [
+            {
+                id: 1,
+                nameVi: 'Giảm 20% cuối tuần',
+                nameEn: '20% Off Weekend Special',
+                descVi: 'Offers đặc biệt cho kỳ nghỉ cuối tuần',
+                descEn: 'Special offer for weekend getaway',
+                termsVi: 'Áp dụng cho Bookings từ thứ 6 đến chủ nhật',
+                termsEn: 'Valid for Friday to Sunday bookings',
+                code: 'WEEKEND20',
+                discountType: 'percentage',
+                discountValue: 20,
+                startDate: '2026-01-01',
+                endDate: '2026-12-31',
+                quantity: null,
+                active: true
+            }
+        ];
+
+        let currentVoucherId = null;
+        let sectionEnabled = true;
+
+        function init() {
+            renderVouchers();
+        }
+
+        function toggleSection() {
+            sectionEnabled = document.getElementById('sectionToggle').checked;
+            const status = document.getElementById('sectionStatus');
+            const inputs = document.querySelectorAll('.form-input, .form-textarea, .form-select, input[type="checkbox"]');
+
+            if (sectionEnabled) {
+                status.textContent = 'Đang hiển thị';
+                status.className = 'toggle-status active';
+                inputs.forEach(input => input.disabled = false);
+            } else {
+                status.textContent = 'Đã ẩn';
+                status.className = 'toggle-status inactive';
+                inputs.forEach(input => input.disabled = true);
+            }
+        }
+
+        function renderVouchers() {
+            const container = document.getElementById('vouchersList');
+            if (vouchers.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#64748b; padding:40px;">Chưa có Offers nào. Click "Thêm Offers mới" để bắt đầu.</p>';
+                return;
+            }
+
+            container.innerHTML = vouchers.map(v => {
+                const isExpired = new Date(v.endDate) < new Date();
+                const discount = v.discountType === 'percentage'
+                    ? `${v.discountValue}%`
+                    : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(v.discountValue);
+
+                return `
+                    <div class="room-card">
+                        <div class="room-info">
+                            <h3>${v.nameVi} / ${v.nameEn}</h3>
+                            <div class="room-meta">
+                                <span><i class="fas fa-ticket-alt"></i> ${v.code || 'Không có mã'}</span>
+                                <span><i class="fas fa-tag"></i> Giảm ${discount}</span>
+                                <span><i class="fas fa-calendar"></i> ${formatDate(v.startDate)} - ${formatDate(v.endDate)}</span>
+                                <span style="color: ${v.active && !isExpired ? '#059669' : '#dc2626'}">
+                                    <i class="fas fa-circle" style="font-size: 8px;"></i>
+                                    ${isExpired ? 'Hết hạn' : (v.active ? 'Active' : 'Tạm dừng')}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="room-actions">
+                            <button class="btn btn-secondary" onclick="editVoucher(${v.id})">
+                                <i class="fas fa-edit"></i> Sửa
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteVoucher(${v.id})">
+                                <i class="fas fa-trash"></i> Xóa
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function formatDate(dateStr) {
+            return new Date(dateStr).toLocaleDateString('vi-VN');
+        }
+
+        function addVoucher() {
+            if (!sectionEnabled) {
+                alert('Vui lòng bật hiển thị Section Offers trước khi thêm voucher mới');
+                return;
+            }
+            currentVoucherId = null;
+            document.getElementById('modalTitle').textContent = 'Thêm Offers mới';
+            clearForm();
+            document.getElementById('voucherModal').style.display = 'flex';
+        }
+
+        function editVoucher(id) {
+            currentVoucherId = id;
+            const v = vouchers.find(v => v.id === id);
+            if (!v) return;
+
+            document.getElementById('modalTitle').textContent = 'Chỉnh sửa Offers';
+            document.getElementById('nameVi').value = v.nameVi;
+            document.getElementById('nameEn').value = v.nameEn;
+            document.getElementById('descVi').value = v.descVi;
+            document.getElementById('descEn').value = v.descEn;
+            document.getElementById('termsVi').value = v.termsVi;
+            document.getElementById('termsEn').value = v.termsEn;
+            document.getElementById('voucherCode').value = v.code;
+            document.getElementById('discountType').value = v.discountType;
+            document.getElementById('discountValue').value = v.discountValue;
+            document.getElementById('startDate').value = v.startDate;
+            document.getElementById('endDate').value = v.endDate;
+            document.getElementById('quantity').value = v.quantity || '';
+            document.getElementById('voucherActive').checked = v.active;
+            updateDiscountLabel();
+
+            document.getElementById('voucherModal').style.display = 'flex';
+        }
+
+        function deleteVoucher(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa Offers này?')) {
+                vouchers = vouchers.filter(v => v.id !== id);
+                renderVouchers();
+                showSuccess('Đã xóa Offers thành công');
+            }
+        }
+
+        function saveVoucher() {
+            const nameVi = document.getElementById('nameVi').value;
+            const nameEn = document.getElementById('nameEn').value;
+
+            if (!nameVi || !nameEn) {
+                alert('Vui lòng điền tên Offers bằng cả 2 ngôn ngữ');
+                return;
+            }
+
+            const voucherData = {
+                nameVi, nameEn,
+                descVi: document.getElementById('descVi').value,
+                descEn: document.getElementById('descEn').value,
+                termsVi: document.getElementById('termsVi').value,
+                termsEn: document.getElementById('termsEn').value,
+                code: document.getElementById('voucherCode').value.toUpperCase(),
+                discountType: document.getElementById('discountType').value,
+                discountValue: parseFloat(document.getElementById('discountValue').value) || 0,
+                startDate: document.getElementById('startDate').value,
+                endDate: document.getElementById('endDate').value,
+                quantity: document.getElementById('quantity').value ? parseInt(document.getElementById('quantity').value) : null,
+                active: document.getElementById('voucherActive').checked
+            };
+
+            if (currentVoucherId) {
+                const index = vouchers.findIndex(v => v.id === currentVoucherId);
+                vouchers[index] = { ...vouchers[index], ...voucherData };
+                showSuccess('Đã cập nhật Offers thành công');
+            } else {
+                voucherData.id = vouchers.length > 0 ? Math.max(...vouchers.map(v => v.id)) + 1 : 1;
+                vouchers.push(voucherData);
+                showSuccess('Đã thêm Offers mới thành công');
+            }
+
+            closeModal();
+            renderVouchers();
+        }
+
+        function clearForm() {
+            ['nameVi', 'nameEn', 'descVi', 'descEn', 'termsVi', 'termsEn', 'voucherCode', 'discountValue', 'startDate', 'endDate', 'quantity'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            document.getElementById('discountType').value = 'percentage';
+            document.getElementById('voucherActive').checked = true;
+            updateDiscountLabel();
+        }
+
+        function updateDiscountLabel() {
+            const type = document.getElementById('discountType').value;
+            document.getElementById('discountLabel').textContent = type === 'percentage' ? 'Giá trị giảm (%)' : 'Giá trị giảm (VNĐ)';
+        }
+
+        function closeModal() {
+            document.getElementById('voucherModal').style.display = 'none';
+        }
+
+        function switchLang(lang) {
+            document.querySelectorAll('.language-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            document.querySelectorAll('.lang-content').forEach(content => content.classList.remove('active'));
+            document.getElementById('lang-' + lang).classList.add('active');
+        }
+
+        function showSuccess(message) {
+            const alert = document.getElementById('successAlert');
+            document.getElementById('successMessage').textContent = message;
+            alert.classList.remove('hidden');
+            setTimeout(() => alert.classList.add('hidden'), 3000);
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+
+    <!-- Auth & Dashboard Switcher Scripts -->
+    <script src="../shared/auth.js"></script>
+    <script src="../shared/upgrade-modal.js"></script>
+    <script src="../shared/dashboard-switcher.js"></script>
+    <script>
+        Auth.checkDashboardAccess('vr-hotel');
+        initDashboardSwitcher('vr-hotel');
+        function logout() { if (confirm('B?n c� ch?c ch?n mu?n dang xu?t?')) { Auth.logout(); } }
+    </script>
+</body>
+
+</html>

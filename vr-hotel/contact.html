@@ -1,0 +1,373 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - VR360 Hotel Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="styles/admin.css">
+</head>
+<body>
+    <!-- Sidebar - Same as other pages -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-hotel"></i></div>
+                <div class="logo-text">Link Hotel VR</div>
+            </div>
+        </div>
+        <div class="property-selector">
+            <div class="property-label">Current Hotel</div>
+            <div class="property-name">Link Hotel VR360</div>
+        </div>
+        
+        <!-- Dashboard Switcher will be injected here -->
+        <div id="dashboard-switcher-container"></div>
+
+        <nav class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title">MANAGEMENT</div>
+                <a href="index.html" class="nav-item"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="introduction.html" class="nav-item"><i class="fas fa-info-circle"></i> Introduction</a>
+                <a href="rooms.html" class="nav-item"><i class="fas fa-bed"></i> Rooms</a>
+                <a href="dining.html" class="nav-item"><i class="fas fa-utensils"></i> Dining</a>
+                <a href="vouchers.html" class="nav-item"><i class="fas fa-ticket-alt"></i> Offers</a>
+                <a href="facilities.html" class="nav-item"><i class="fas fa-swimming-pool"></i> Facilities</a>
+                <a href="policies.html" class="nav-item"><i class="fas fa-file-contract"></i> Policies</a>
+                <a href="rules.html" class="nav-item"><i class="fas fa-book-open"></i> Rules</a>
+                <a href="contact.html" class="nav-item active"><i class="fas fa-phone"></i> Contact</a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">SETTINGS</div>
+                <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i> Settings</a>
+                <a href="https://hotel-vr-demo.netlify.app/" class="nav-item" target="_blank"><i class="fas fa-eye"></i> View Website</a>
+                <a href="#" class="nav-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <h1 class="page-title">Contact</h1>
+        </div>
+        <div class="header-right">
+            <div class="user-menu">
+                <div class="user-avatar">AD</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="alert alert-success hidden" id="successAlert">
+            <i class="fas fa-check-circle"></i>
+            <span>Saved successfully!</span>
+        </div>
+
+        <!-- Status Toggle -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title">Display Status - Section Contact</div>
+                <div class="toggle-container">
+                    <span class="toggle-status active" id="sectionStatus">Visible</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="sectionToggle" checked onchange="toggleSection()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="alert" style="background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd;">
+                    <i class="fas fa-info-circle"></i>
+                    <span>When disabled, the Contact section will not be displayed on the website and all input fields will be disabled.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title">Contact Information</div>
+            </div>
+            <div class="card-body">
+                <div class="language-tabs">
+                    <button class="language-tab active" onclick="switchLang('vi')">Vietnamese</button>
+                    <button class="language-tab" onclick="switchLang('en')">English</button>
+                </div>
+
+                <!-- Vietnamese -->
+                <div class="lang-content active" id="lang-vi">
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-map-marker-alt"></i> Address <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="addressVi" value="123 Trần Phú, Phường 5, TP. Vũng Tàu, Bà Rịa - Vũng Tàu">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label"><i class="fas fa-phone"></i> Phone Number <span class="required">*</span></label>
+                            <input type="tel" class="form-input" id="phoneVi" value="+84 254 123 4567">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label"><i class="fas fa-mobile-alt"></i> Hotline 24/7</label>
+                            <input type="tel" class="form-input" id="hotlineVi" value="+84 901 234 567">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label"><i class="fas fa-envelope"></i> Email <span class="required">*</span></label>
+                            <input type="email" class="form-input" id="emailVi" value="info@linkhotelvr.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label"><i class="fas fa-envelope-open"></i> Email Bookings</label>
+                            <input type="email" class="form-input" id="bookingEmailVi" value="booking@linkhotelvr.com">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-clock"></i> Working Hours</label>
+                        <textarea class="form-textarea" id="workingHoursVi" rows="3">Reception: 24/7
+Bookings Department: 8:00 - 22:00 daily
+Check-in: From 14:00 | Check-out: Before 12:00</textarea>
+                    </div>
+                </div>
+
+                <!-- English -->
+                <div class="lang-content" id="lang-en">
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-map-marker-alt"></i> Address <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="addressEn" value="123 Tran Phu St., Ward 5, Vung Tau City, Ba Ria - Vung Tau Province">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label"><i class="fas fa-phone"></i> Phone <span class="required">*</span></label>
+                            <input type="tel" class="form-input" id="phoneEn" value="+84 254 123 4567">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label"><i class="fas fa-mobile-alt"></i> 24/7 Hotline</label>
+                            <input type="tel" class="form-input" id="hotlineEn" value="+84 901 234 567">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label"><i class="fas fa-envelope"></i> Email <span class="required">*</span></label>
+                            <input type="email" class="form-input" id="emailEn" value="info@linkhotelvr.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label"><i class="fas fa-envelope-open"></i> Booking Email</label>
+                            <input type="email" class="form-input" id="bookingEmailEn" value="booking@linkhotelvr.com">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-clock"></i> Working Hours</label>
+                        <textarea class="form-textarea" id="workingHoursEn" rows="3">Front Desk: 24/7
+Reservation Dept: 8:00 AM - 10:00 PM daily
+Check-in: From 2:00 PM | Check-out: Before 12:00 PM</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map & VR Location -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title"><i class="fas fa-map"></i> Map & VR360 Location</div>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">Google Maps Embed URL</label>
+                    <input type="url" class="form-input" id="mapUrl" 
+                           value="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.123!2d107.086!3d10.345" 
+                           placeholder="Enter Google Maps embed URL">
+                    <p class="form-help">
+                        <i class="fas fa-info-circle"></i>
+                        Go to Google Maps → Share → Embed a map → Copy HTML
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">GPS Coordinates (Latitude, Longitude)</label>
+                    <div class="form-row">
+                        <input type="text" class="form-input" id="latitude" value="10.3452" placeholder="Latitude">
+                        <input type="text" class="form-input" id="longitude" value="107.0861" placeholder="Longitude">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-vr-cardboard"></i> VR360 Location Panorama</label>
+                    <input type="url" class="form-input" id="vrLocationLink" 
+                           value="https://example.com/hotel-entrance-vr.jpg"
+                           placeholder="360° panorama image link for reception/entrance area">
+                    <p class="form-help">
+                        360° panorama allows customers to view the hotel's reception and entrance area
+                    </p>
+                </div>
+
+                <!-- Map Preview -->
+                <div style="margin-top: 20px; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+                    <div style="padding: 12px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; font-weight: 500; font-size: 14px;">
+                        <i class="fas fa-eye"></i> Map Preview
+                    </div>
+                    <div style="height: 300px; background: #e5e7eb; display: flex; align-items: center; justify-content: center; color: #6b7280;">
+                        <div style="text-align: center;">
+                            <i class="fas fa-map-marked-alt" style="font-size: 48px; margin-bottom: 12px;"></i>
+                            <p>Google Maps will be displayed here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Social Media -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title"><i class="fas fa-share-alt"></i> Social Media</div>
+            </div>
+            <div class="card-body">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                    <div class="form-group">
+                        <label class="form-label"><i class="fab fa-facebook" style="color: #1877f2;"></i> Facebook</label>
+                        <input type="url" class="form-input" id="facebook" value="https://facebook.com/linkhotelvr" placeholder="https://facebook.com/yourpage">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label"><i class="fab fa-instagram" style="color: #e4405f;"></i> Instagram</label>
+                        <input type="url" class="form-input" id="instagram" value="https://instagram.com/linkhotelvr" placeholder="https://instagram.com/yourpage">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label"><i class="fab fa-youtube" style="color: #ff0000;"></i> YouTube</label>
+                        <input type="url" class="form-input" id="youtube" value="" placeholder="https://youtube.com/yourchannel">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label"><i class="fab fa-tripadvisor" style="color: #00af87;"></i> TripAdvisor</label>
+                        <input type="url" class="form-input" id="tripadvisor" value="" placeholder="https://tripadvisor.com/yourhotel">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label"><i class="fab fa-twitter" style="color: #1da1f2;"></i> Twitter/X</label>
+                        <input type="url" class="form-input" id="twitter" value="" placeholder="https://twitter.com/yourhotel">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label"><i class="fab fa-tiktok"></i> TikTok</label>
+                        <input type="url" class="form-input" id="tiktok" value="" placeholder="https://tiktok.com/@yourhotel">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; gap: 12px; margin-top: 24px;">
+            <button class="btn btn-primary" onclick="saveContact()">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+            <button class="btn btn-secondary" onclick="resetForm()">
+                <i class="fas fa-undo"></i> Cancel
+            </button>
+        </div>
+    </main>
+
+    <script>
+        let sectionEnabled = true;
+
+        function toggleSection() {
+            sectionEnabled = document.getElementById('sectionToggle').checked;
+            const status = document.getElementById('sectionStatus');
+            const inputs = document.querySelectorAll('.form-input, .form-textarea');
+            
+            if (sectionEnabled) {
+                status.textContent = 'Visible';
+                status.className = 'toggle-status active';
+                inputs.forEach(input => input.disabled = false);
+            } else {
+                status.textContent = 'Hidden';
+                status.className = 'toggle-status inactive';
+                inputs.forEach(input => input.disabled = true);
+            }
+        }
+
+        function switchLang(lang) {
+            document.querySelectorAll('.language-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.lang-content').forEach(content => content.classList.remove('active'));
+            document.getElementById('lang-' + lang).classList.add('active');
+        }
+
+        function saveContact() {
+            const data = {
+                enabled: document.getElementById('sectionToggle').checked,
+                vi: {
+                    address: document.getElementById('addressVi').value,
+                    phone: document.getElementById('phoneVi').value,
+                    hotline: document.getElementById('hotlineVi').value,
+                    email: document.getElementById('emailVi').value,
+                    bookingEmail: document.getElementById('bookingEmailVi').value,
+                    workingHours: document.getElementById('workingHoursVi').value
+                },
+                en: {
+                    address: document.getElementById('addressEn').value,
+                    phone: document.getElementById('phoneEn').value,
+                    hotline: document.getElementById('hotlineEn').value,
+                    email: document.getElementById('emailEn').value,
+                    bookingEmail: document.getElementById('bookingEmailEn').value,
+                    workingHours: document.getElementById('workingHoursEn').value
+                },
+                map: {
+                    url: document.getElementById('mapUrl').value,
+                    latitude: document.getElementById('latitude').value,
+                    longitude: document.getElementById('longitude').value,
+                    vrLink: document.getElementById('vrLocationLink').value
+                },
+                social: {
+                    facebook: document.getElementById('facebook').value,
+                    instagram: document.getElementById('instagram').value,
+                    youtube: document.getElementById('youtube').value,
+                    tripadvisor: document.getElementById('tripadvisor').value,
+                    twitter: document.getElementById('twitter').value,
+                    tiktok: document.getElementById('tiktok').value
+                }
+            };
+
+            console.log('Saving contact data:', data);
+            localStorage.setItem('contact_data', JSON.stringify(data));
+
+            const alert = document.getElementById('successAlert');
+            alert.classList.remove('hidden');
+            setTimeout(() => alert.classList.add('hidden'), 3000);
+        }
+
+        function resetForm() {
+            if (confirm('Bạn có chắc muốn hủy bỏ các thay đổi?')) {
+                location.reload();
+            }
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        }
+    </script>
+
+    <!-- Auth & Dashboard Switcher Scripts -->
+    <script src="../shared/auth.js"></script>
+    <script src="../shared/upgrade-modal.js"></script>
+    <script src="../shared/dashboard-switcher.js"></script>
+    <script>
+        Auth.checkDashboardAccess('vr-hotel');
+        initDashboardSwitcher('vr-hotel');
+        function logout() { if(confirm('B?n c� ch?c ch?n mu?n dang xu?t?')) { Auth.logout(); } }
+    </script>
+</body>
+</html>

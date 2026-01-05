@@ -1,0 +1,209 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rooms - Link Hotel VR360 Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="styles/admin.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-hotel"></i></div>
+                <div class="logo-text">Link Hotel VR</div>
+            </div>
+        </div>
+        <div class="property-selector">
+            <div class="property-label">Current Hotel</div>
+            <div class="property-name">Link Hotel VR360</div>
+        </div>
+
+        <!-- Dashboard Switcher will be injected here -->
+        <div id="dashboard-switcher-container"></div>
+
+        <nav class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title">MANAGEMENT</div>
+                <a href="index.html" class="nav-item"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="introduction.html" class="nav-item"><i class="fas fa-info-circle"></i> Introduction</a>
+                <a href="rooms.html" class="nav-item active"><i class="fas fa-bed"></i> Rooms</a>
+                <a href="dining.html" class="nav-item"><i class="fas fa-utensils"></i> Dining</a>
+                <a href="vouchers.html" class="nav-item"><i class="fas fa-ticket-alt"></i> Offers</a>
+                <a href="facilities.html" class="nav-item"><i class="fas fa-swimming-pool"></i> Facilities</a>
+                <a href="policies.html" class="nav-item"><i class="fas fa-file-contract"></i> Policies</a>
+                <a href="rules.html" class="nav-item"><i class="fas fa-book-open"></i> Rules</a>
+                <a href="contact.html" class="nav-item"><i class="fas fa-phone"></i> Contact</a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">SETTINGS</div>
+                <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i> Settings</a>
+                <a href="https://hotel-vr-demo.netlify.app/" class="nav-item" target="_blank"><i class="fas fa-eye"></i> View Website</a>
+                <a href="#" class="nav-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <h1 class="page-title">Rooms</h1>
+        </div>
+        <div class="header-right">
+            <div class="user-menu">
+                <div class="user-avatar">AD</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="alert alert-success hidden" id="successAlert">
+            <i class="fas fa-check-circle"></i>
+            <span id="successMessage">Đã lưu thành công!</span>
+        </div>
+
+        <!-- Status Card -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title">Display Status - Section Rooms</div>
+                <div class="toggle-container">
+                    <span class="toggle-status active" id="sectionStatus">Đang hiển thị</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="sectionToggle" checked onchange="toggleSection()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rooms List -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title">Room List</div>
+                <button class="btn btn-primary" onclick="addRoom()">
+                    <i class="fas fa-plus"></i> Add New Room
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="roomsList">
+                    <!-- Room items will be added here dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Room Edit Modal -->
+        <div class="modal" id="roomModal" style="display: none;">
+            <div class="modal-content" style="max-width: 800px;">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Add New Room</h3>
+                    <button class="close-btn" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="language-tabs">
+                        <button class="language-tab active" onclick="switchLang('vi')">Tiếng Việt</button>
+                        <button class="language-tab" onclick="switchLang('en')">English</button>
+                    </div>
+
+                    <!-- Vietnamese Content -->
+                    <div class="lang-content active" id="lang-vi">
+                        <div class="form-group">
+                            <label class="form-label">Room Name (VI) <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="nameVi" placeholder="VD: Phòng Deluxe Hướng Biển">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Mô tả (VI)</label>
+                            <textarea class="form-textarea" id="descVi" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- English Content -->
+                    <div class="lang-content" id="lang-en">
+                        <div class="form-group">
+                            <label class="form-label">Room Name (EN) <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="nameEn" placeholder="E.g: Deluxe Ocean View">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description (EN)</label>
+                            <textarea class="form-textarea" id="descEn" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Loại phòng</label>
+                        <select class="form-select" id="roomType">
+                            <option value="standard">Standard</option>
+                            <option value="deluxe">Deluxe</option>
+                            <option value="suite">Suite</option>
+                            <option value="penthouse">Penthouse</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Giá/đêm (VNĐ)</label>
+                            <input type="number" class="form-input" id="price" placeholder="1500000">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Diện tích (m²)</label>
+                            <input type="number" class="form-input" id="area" placeholder="35">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Số khách tối đa</label>
+                            <input type="number" class="form-input" id="maxGuests" value="2">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-vr-cardboard"></i> Link VR360 Panorama</label>
+                        <input type="url" class="form-input" id="vrLink" placeholder="https://example.com/room-vr.jpg">
+                        <p class="form-help">Nhập URL ảnh panorama 360° của phòng</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Tiện nghi phòng</label>
+                        <div class="amenities-grid">
+                            <label><input type="checkbox" class="amenity" value="wifi"> <i class="fas fa-wifi"></i> WiFi miễn phí</label>
+                            <label><input type="checkbox" class="amenity" value="tv"> <i class="fas fa-tv"></i> TV màn hình phẳng</label>
+                            <label><input type="checkbox" class="amenity" value="ac"> <i class="fas fa-snowflake"></i> Điều hòa</label>
+                            <label><input type="checkbox" class="amenity" value="minibar"> <i class="fas fa-wine-bottle"></i> Minibar</label>
+                            <label><input type="checkbox" class="amenity" value="safe"> <i class="fas fa-lock"></i> Két sắt</label>
+                            <label><input type="checkbox" class="amenity" value="balcony"> <i class="fas fa-home"></i> Ban công</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeModal()">Hủy</button>
+                    <button class="btn btn-primary" onclick="saveRoom()">Lưu phòng</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="scripts/rooms.js"></script>
+
+    <!-- Auth & Dashboard Switcher Scripts -->
+    <script src="../shared/auth.js"></script>
+    <script src="../shared/upgrade-modal.js"></script>
+    <script src="../shared/dashboard-switcher.js"></script>
+    <script>
+        // Wait for DOM ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication and dashboard access
+            Auth.checkDashboardAccess('vr-hotel');
+            
+            // Initialize dashboard switcher
+            initDashboardSwitcher('vr-hotel');
+        });
+        
+        // Update logout function
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        }
+    </script>
+</body>
+</html>

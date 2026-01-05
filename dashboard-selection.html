@@ -1,0 +1,433 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Dashboard - Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #3b82f6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-info {
+            background: rgba(255,255,255,0.2);
+            padding: 15px 25px;
+            border-radius: 50px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .welcome-section {
+            text-align: center;
+            color: white;
+            margin-bottom: 60px;
+        }
+
+        .welcome-section h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .welcome-section p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .dashboard-card.locked {
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        .dashboard-card.locked:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .dashboard-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+        }
+
+        .travel-link .dashboard-icon {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+
+        .vr-hotel .dashboard-icon {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .dashboard-card h2 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .dashboard-card p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-features {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .feature-item i {
+            margin-right: 12px;
+            color: #10b981;
+        }
+
+        .btn-access {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .travel-link .btn-access {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+        }
+
+        .vr-hotel .btn-access {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-access:hover {
+            transform: scale(1.05);
+        }
+
+        .locked-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #ef4444;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .upgrade-notice {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-access.locked {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .btn-access.locked:hover {
+            transform: none;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .welcome-section h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="user-info">
+            <div class="user-avatar" id="userAvatar">AD</div>
+            <div>
+                <div style="font-weight: 600;" id="userName">Administrator</div>
+                <div style="font-size: 12px; opacity: 0.8;" id="userRole">Full Access</div>
+            </div>
+        </div>
+        <button class="logout-btn" onclick="Auth.logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+
+    <div class="container">
+        <div class="welcome-section">
+            <h1>Choose the dashboard you want to manage</h1>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Travel Link Dashboard -->
+            <div class="dashboard-card travel-link" id="travelCard">
+                <div class="dashboard-icon">
+                    <i class="fas fa-plane-departure"></i>
+                </div>
+                <h2>Travel Link</h2>
+                <p>Manage travel website, tours, bookings and travel services.</p>
+                
+                <div class="dashboard-features">
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Manage tours & destinations</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Booking & reservation system</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Customer management</span>
+                    </div>
+                </div>
+
+                <button class="btn-access" onclick="accessDashboard('travel-link')">
+                    <i class="fas fa-arrow-right"></i>
+                    Access Dashboard
+                </button>
+            </div>
+
+            <!-- VR Hotel Dashboard -->
+            <div class="dashboard-card vr-hotel" id="hotelCard">
+                <div class="dashboard-icon">
+                    <i class="fas fa-hotel"></i>
+                </div>
+                <h2>VR Hotel</h2>
+                <p>Manage hotel with VR360 Panorama technology.</p>
+                
+                <div class="dashboard-features">
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Manage rooms & services</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>VR360 virtual tours</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Booking & voucher system</span>
+                    </div>
+                </div>
+
+                <button class="btn-access" onclick="accessDashboard('vr-hotel')">
+                    <i class="fas fa-arrow-right"></i>
+                    Access Dashboard
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="shared/auth.js"></script>
+    <script src="shared/upgrade-modal.js"></script>
+    <script>
+        // Check authentication
+        if (!Auth.isAuthenticated()) {
+            window.location.href = 'login.html';
+        }
+
+        // Load user info
+        const userInfo = Auth.getUserInfo();
+        if (userInfo) {
+            document.getElementById('userName').textContent = userInfo.fullName;
+            document.getElementById('userRole').textContent = userInfo.role;
+            document.getElementById('userAvatar').textContent = userInfo.fullName.substring(0, 2).toUpperCase();
+        }
+
+        // Check permissions and update UI
+        function updateDashboardAccess() {
+            const travelCard = document.getElementById('travelCard');
+            const hotelCard = document.getElementById('hotelCard');
+
+            // Check Travel Link permission
+            if (!Auth.hasPermission('travel-link')) {
+                travelCard.classList.add('locked');
+                travelCard.onclick = () => showUpgradeModal('travel-link');
+                
+                travelCard.innerHTML += `
+                    <div class="locked-badge">
+                        <i class="fas fa-lock"></i>
+                        Locked
+                    </div>
+                `;
+                
+                const travelBtn = travelCard.querySelector('.btn-access');
+                travelBtn.classList.add('locked');
+                travelBtn.innerHTML = '<i class="fas fa-lock"></i> Upgrade Required';
+                travelBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    showUpgradeModal('travel-link');
+                };
+
+                travelCard.innerHTML += `
+                    <div class="upgrade-notice">
+                        <i class="fas fa-info-circle"></i>
+                        <span>You need to upgrade to use this feature</span>
+                    </div>
+                `;
+            }
+
+            // Check VR Hotel permission
+            if (!Auth.hasPermission('vr-hotel')) {
+                hotelCard.classList.add('locked');
+                hotelCard.onclick = () => showUpgradeModal('vr-hotel');
+                
+                hotelCard.innerHTML += `
+                    <div class="locked-badge">
+                        <i class="fas fa-lock"></i>
+                        Locked
+                    </div>
+                `;
+                
+                const hotelBtn = hotelCard.querySelector('.btn-access');
+                hotelBtn.classList.add('locked');
+                hotelBtn.innerHTML = '<i class="fas fa-lock"></i> Upgrade Required';
+                hotelBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    showUpgradeModal('vr-hotel');
+                };
+
+                hotelCard.innerHTML += `
+                    <div class="upgrade-notice">
+                        <i class="fas fa-info-circle"></i>
+                        <span>You need to upgrade to use this feature</span>
+                    </div>
+                `;
+            }
+        }
+
+        function accessDashboard(dashboard) {
+            if (Auth.hasPermission(dashboard)) {
+                if (dashboard === 'travel-link') {
+                    window.location.href = 'travel-link/index.html';
+                } else if (dashboard === 'vr-hotel') {
+                    window.location.href = 'vr-hotel/index.html';
+                }
+            } else {
+                showUpgradeModal(dashboard);
+            }
+        }
+
+        function showUpgradeModal(dashboard) {
+            // This will be handled by upgrade-modal.js
+            if (typeof showUpgradeModalDialog === 'function') {
+                showUpgradeModalDialog(dashboard);
+            }
+        }
+
+        // Check for error parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('error') === 'access_denied') {
+            alert('⚠️ You do not have permission to access this dashboard. Please upgrade your account.');
+        }
+
+        // Initialize
+        updateDashboardAccess();
+    </script>
+</body>
+</html>

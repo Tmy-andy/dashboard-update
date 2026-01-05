@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Dashboard Switcher</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .sidebar {
+            width: 250px;
+            background: #1e293b;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+        .property-selector {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .property-label {
+            color: rgba(255,255,255,0.6);
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        .property-name {
+            color: white;
+            font-weight: 600;
+        }
+        #dashboard-switcher-container {
+            background: rgba(255,0,0,0.1);
+            min-height: 50px;
+        }
+        .test-info {
+            margin-left: 270px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="property-selector">
+            <div class="property-label">Khách sạn hiện tại</div>
+            <div class="property-name">Link Hotel VR360</div>
+        </div>
+        
+        <div id="dashboard-switcher-container"></div>
+    </div>
+
+    <div class="test-info">
+        <h1>Test Dashboard Switcher</h1>
+        <p>Kiểm tra xem dashboard switcher có hiển thị không.</p>
+        <div id="status"></div>
+    </div>
+
+    <script src="shared/auth.js"></script>
+    <script src="shared/upgrade-modal.js"></script>
+    <script src="shared/dashboard-switcher.js"></script>
+    <script>
+        // Create fake session for testing
+        const testSession = {
+            username: 'admin',
+            fullName: 'Administrator',
+            role: 'Full Access',
+            permissions: ['travel-link', 'vr-hotel'],
+            loginTime: new Date().toISOString()
+        };
+        sessionStorage.setItem('auth_session', JSON.stringify(testSession));
+
+        // Initialize
+        const statusDiv = document.getElementById('status');
+        statusDiv.innerHTML = '<p>✓ Auth session created</p>';
+        
+        if (Auth.isAuthenticated()) {
+            statusDiv.innerHTML += '<p>✓ User is authenticated</p>';
+            statusDiv.innerHTML += '<p>User: ' + Auth.getUserInfo().fullName + '</p>';
+        }
+
+        statusDiv.innerHTML += '<p>Initializing dashboard switcher...</p>';
+        initDashboardSwitcher('vr-hotel');
+        
+        setTimeout(() => {
+            const container = document.getElementById('dashboard-switcher-container');
+            if (container && container.innerHTML.trim()) {
+                statusDiv.innerHTML += '<p style="color: green;">✓ Dashboard switcher loaded!</p>';
+                statusDiv.innerHTML += '<p>Container content length: ' + container.innerHTML.length + '</p>';
+            } else {
+                statusDiv.innerHTML += '<p style="color: red;">✗ Dashboard switcher NOT loaded</p>';
+                statusDiv.innerHTML += '<p>Container: ' + (container ? 'Found' : 'Not found') + '</p>';
+            }
+        }, 500);
+    </script>
+</body>
+</html>

@@ -1,0 +1,916 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction - VR360 Hotel Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 250px;
+            right: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 200;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .property-selector {
+            margin: 16px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .property-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+
+        .property-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #0f172a;
+        }
+
+        .nav-menu {
+            padding: 8px;
+        }
+
+        .nav-section {
+            margin-bottom: 24px;
+        }
+
+        .nav-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            padding: 0 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            margin-bottom: 2px;
+            border-radius: 6px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .nav-item.active {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+        }
+
+        .nav-item i {
+            width: 18px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            margin-top: 64px;
+            padding: 24px;
+            min-height: calc(100vh - 64px);
+        }
+
+        /* Content Card */
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        /* Toggle Switch */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toggle-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #64748b;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            transition: 0.3s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked+.toggle-slider {
+            background-color: #10b981;
+        }
+
+        input:checked+.toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        .toggle-status {
+            font-size: 14px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+
+        .toggle-status.active {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .toggle-status.inactive {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .form-label .required {
+            color: #ef4444;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-input:disabled,
+        .form-textarea:disabled,
+        .form-select:disabled {
+            background-color: #f3f4f6;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-help {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        /* Language Tabs */
+        .language-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .language-tab {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: -2px;
+        }
+
+        .language-tab:hover {
+            color: #374151;
+        }
+
+        .language-tab.active {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+        }
+
+        .language-content {
+            display: none;
+        }
+
+        .language-content.active {
+            display: block;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-primary:disabled {
+            background: #93c5fd;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fcd34d;
+        }
+
+        .alert.hidden {
+            display: none;
+        }
+
+        /* VR Preview */
+        .vr-preview {
+            margin-top: 16px;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px dashed #cbd5e1;
+        }
+
+        .vr-preview-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #475569;
+            margin-bottom: 12px;
+        }
+
+        .vr-preview-box {
+            width: 100%;
+            height: 300px;
+            background: #1e293b;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        .vr-preview-box.has-link {
+            background-image: linear-gradient(45deg, #1e293b 25%, #334155 25%, #334155 50%, #1e293b 50%, #1e293b 75%, #334155 75%, #334155 100%);
+            background-size: 20px 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .header {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        .nav-item.logout {
+            color: #ef4444;
+        }
+
+        .nav-item.logout:hover {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-hotel"></i>
+                </div>
+                <div class="logo-text">Link Hotel VR</div>
+            </div>
+        </div>
+
+        <div class="property-selector">
+            <div class="property-label">Current Hotel </div>
+            <div class="property-name">Link Hotel VR360</div>
+        </div>
+        
+        <!-- Dashboard Switcher will be injected here -->
+        <div id="dashboard-switcher-container"></div>
+
+        <nav class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title">MANAGEMENT</div>
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+                <a href="introduction.html" class="nav-item active">
+                    <i class="fas fa-info-circle"></i>
+                    Introduction
+                </a>
+                <a href="rooms.html" class="nav-item">
+                    <i class="fas fa-bed"></i>
+                    Rooms
+                </a>
+                <a href="dining.html" class="nav-item">
+                    <i class="fas fa-utensils"></i>
+                    Dining
+                </a>
+                <a href="vouchers.html" class="nav-item">
+                    <i class="fas fa-ticket-alt"></i>
+                    Offers
+                </a>
+                <a href="facilities.html" class="nav-item">
+                    <i class="fas fa-swimming-pool"></i>
+                    Facilities
+                </a>
+                <a href="policies.html" class="nav-item">
+                    <i class="fas fa-file-contract"></i>
+                    Policies
+                </a>
+                <a href="rules.html" class="nav-item">
+                    <i class="fas fa-book-open"></i>
+                    Rules
+                </a>
+                <a href="contact.html" class="nav-item">
+                    <i class="fas fa-phone"></i>
+                    Contact
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">SETTINGS</div>
+                <a href="settings.html" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </a>
+                <a href="https://hotel-vr-demo.netlify.app/" class="nav-item" target="_blank">
+                    <i class="fas fa-eye"></i>
+                    View Website
+                </a>
+                <a href="#" class="nav-item logout" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <h1 class="page-title">Hotel Introduction</h1>
+        </div>
+        <div class="header-right">
+            <div class="user-menu">
+                <div class="user-avatar">AD</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Success Alert -->
+        <div class="alert alert-success hidden" id="successAlert">
+            <i class="fas fa-check-circle"></i>
+            <span>Đã lưu thay đổi thành công!</span>
+        </div>
+
+        <!-- Status Card -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title">Display Status</div>
+                <div class="toggle-container">
+                    <span class="toggle-status active" id="displayStatus">Đang hiển thị</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="displayToggle" checked onchange="toggleDisplay()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Khi tắt hiển thị, Section "Introduction" sẽ không xuất hiện trên trang web và tất cả các trường nhập
+                        liệu sẽ bị vô hiệu hóa.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Form -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title">Introduction Content</div>
+            </div>
+            <div class="card-body">
+                <!-- Language Tabs -->
+                <div class="language-tabs">
+                    <button class="language-tab active" onclick="switchLanguage('vi')">
+                        <i class="fas fa-flag"></i> Tiếng Việt
+                    </button>
+                    <button class="language-tab" onclick="switchLanguage('en')">
+                        <i class="fas fa-flag"></i> English
+                    </button>
+                </div>
+
+                <!-- Vietnamese Content -->
+                <div class="language-content active" id="content-vi">
+                    <div class="form-group">
+                        <label class="form-label">
+                            Tiêu đề <span class="required">*</span>
+                        </label>
+                        <input type="text" class="form-input" id="title-vi" value="Chào mừng đến với Link Hotel VR360"
+                            placeholder="Enter introduction title">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            Short Description <span class="required">*</span>
+                        </label>
+                        <textarea class="form-textarea" id="description-vi"
+                            placeholder="Nhập Short Description về khách sạn">Experience luxury and comfort at our 5-star hotel. Located in the heart of Vung Tau, we offer world-class service and stunning ocean views.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            Detailed Content
+                        </label>
+                        <textarea class="form-textarea" id="content-vi" style="min-height: 200px;"
+                            placeholder="Nhập Detailed Content về khách sạn">Link Hotel VR360 is the ideal destination for those seeking the perfect blend of luxury, convenience, and modern technology. 
+
+Với vị trí đắc địa ngay trung tâm thành phố Vũng Tàu, khách sạn của chúng tôi mang đến tầm nhìn panorama tuyệt đẹp ra biển và thành phố. 
+
+Điểm nổi bật:
+- 50 phòng và suite được thiết kế sang trọng
+- Nhà hàng cao cấp phục vụ Dining đa quốc gia
+- Bể bơi vô cực trên sân thượng
+- Spa & Wellness Center đẳng cấp
+- Phòng gym hiện đại 24/7
+- Dịch vụ concierge chuyên nghiệp
+
+Đặc biệt, chúng tôi là khách sạn đầu tiên tại Vũng Tàu ứng dụng công nghệ VR360, cho phép khách hàng khám phá không gian khách sạn một cách chân thực nhất trước khi Bookings.</textarea>
+                    </div>
+                </div>
+
+                <!-- English Content -->
+                <div class="language-content" id="content-en">
+                    <div class="form-group">
+                        <label class="form-label">
+                            Title <span class="required">*</span>
+                        </label>
+                        <input type="text" class="form-input" id="title-en" value="Welcome to Link Hotel VR360"
+                            placeholder="Enter introduction title">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            Short Description <span class="required">*</span>
+                        </label>
+                        <textarea class="form-textarea" id="description-en"
+                            placeholder="Enter short description about hotel">Experience luxury and comfort at our 5-star hotel. Located in the heart of Vung Tau, we offer world-class service and stunning ocean views.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            Detailed Content
+                        </label>
+                        <textarea class="form-textarea" id="content-en" style="min-height: 200px;"
+                            placeholder="Enter detailed content about hotel">Link Hotel VR360 is the perfect destination for those seeking the ideal combination of luxury, comfort, and modern technology.
+
+With a prime location in the heart of Vung Tau city, our hotel offers breathtaking panoramic views of the ocean and cityscape.
+
+Highlights:
+- 50 elegantly designed rooms and suites
+- Fine dining restaurant serving international cuisine
+- Rooftop infinity pool
+- Premium Spa & Wellness Center
+- Modern 24/7 fitness center
+- Professional concierge service
+
+Notably, we are the first hotel in Vung Tau to implement VR360 technology, allowing guests to explore our facilities in the most realistic way before booking.</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VR360 Settings -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-vr-cardboard"></i> SETTINGS VR360
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">
+                        Link VR360 Panorama
+                    </label>
+                    <input type="url" class="form-input" id="vrLink"
+                        value="https://example.com/panorama/hotel-lobby.jpg"
+                        placeholder="https://example.com/your-panorama.jpg">
+                    <p class="form-help">
+                        <i class="fas fa-info-circle"></i>
+                        Nhập đường dẫn đến ảnh panorama 360° (khuyến nghị: equirectangular JPG, tối thiểu 4096x2048px)
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        VR Tour Title
+                    </label>
+                    <input type="text" class="form-input" id="vrTitle" value="Sảnh khách sạn"
+                        placeholder="Enter VR tour title">
+                </div>
+
+                <!-- VR Preview -->
+                <div class="vr-preview">
+                    <div class="vr-preview-title">
+                        <i class="fas fa-eye"></i> Xem trước VR360
+                    </div>
+                    <div class="vr-preview-box has-link">
+                        <div style="text-align: center;">
+                            <i class="fas fa-vr-cardboard" style="font-size: 48px; margin-bottom: 12px;"></i>
+                            <p>VR360 Preview</p>
+                            <p style="font-size: 12px; margin-top: 4px;">Click "Xem trước" để tải VR viewer</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 12px; text-align: center;">
+                        <button class="btn btn-secondary" onclick="previewVR()">
+                            <i class="fas fa-play"></i> Xem trước VR360
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="saveChanges()">
+                <i class="fas fa-save"></i> Lưu thay đổi
+            </button>
+            <button class="btn btn-secondary" onclick="resetForm()">
+                <i class="fas fa-undo"></i> Hủy bỏ
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // Toggle display functionality
+        function toggleDisplay() {
+            const toggle = document.getElementById('displayToggle');
+            const status = document.getElementById('displayStatus');
+            const inputs = document.querySelectorAll('.form-input, .form-textarea, .form-select');
+
+            if (toggle.checked) {
+                status.textContent = 'Đang hiển thị';
+                status.className = 'toggle-status active';
+                inputs.forEach(input => input.disabled = false);
+            } else {
+                status.textContent = 'Đã ẩn';
+                status.className = 'toggle-status inactive';
+                inputs.forEach(input => input.disabled = true);
+            }
+        }
+
+        // Switch language tabs
+        function switchLanguage(lang) {
+            // Update tabs
+            document.querySelectorAll('.language-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.closest('.language-tab').classList.add('active');
+
+            // Update content
+            document.querySelectorAll('.language-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById('content-' + lang).classList.add('active');
+        }
+
+        // Save changes
+        function saveChanges() {
+            // Validate required fields
+            const titleVi = document.getElementById('title-vi').value;
+            const descVi = document.getElementById('description-vi').value;
+
+            if (!titleVi || !descVi) {
+                alert('Vui lòng điền đầy đủ các trường bắt buộc (*)');
+                return;
+            }
+
+            // Simulate save
+            const data = {
+                display: document.getElementById('displayToggle').checked,
+                vi: {
+                    title: titleVi,
+                    description: descVi,
+                    content: document.getElementById('content-vi').value
+                },
+                en: {
+                    title: document.getElementById('title-en').value,
+                    description: document.getElementById('description-en').value,
+                    content: document.getElementById('content-en').value
+                },
+                vr: {
+                    link: document.getElementById('vrLink').value,
+                    title: document.getElementById('vrTitle').value
+                }
+            };
+
+            console.log('Saving data:', data);
+
+            // Show success message
+            const alert = document.getElementById('successAlert');
+            alert.classList.remove('hidden');
+            setTimeout(() => {
+                alert.classList.add('hidden');
+            }, 3000);
+
+            // In production, you would send this to your API
+            // fetch('/api/introduction', { method: 'POST', body: JSON.stringify(data) })
+        }
+
+        // Reset form
+        function resetForm() {
+            if (confirm('Bạn có chắc muốn hủy bỏ các thay đổi?')) {
+                location.reload();
+            }
+        }
+
+        // Preview VR
+        function previewVR() {
+            const vrLink = document.getElementById('vrLink').value;
+            if (!vrLink) {
+                alert('Vui lòng nhập link VR360 trước khi xem trước');
+                return;
+            }
+
+            // Open VR viewer in new window
+            window.open('https://hotel-vr-demo.netlify.app/?vr=' + encodeURIComponent(vrLink), '_blank');
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        }
+    </script>
+
+    <!-- Auth & Dashboard Switcher Scripts -->
+    <script src="../shared/auth.js"></script>
+    <script src="../shared/upgrade-modal.js"></script>
+    <script src="../shared/dashboard-switcher.js"></script>
+    <script>
+        Auth.checkDashboardAccess('vr-hotel');
+        initDashboardSwitcher('vr-hotel');
+        function logout() { if (confirm('B?n c� ch?c ch?n mu?n dang xu?t?')) { Auth.logout(); } }
+    </script>
+</body>
+
+</html>

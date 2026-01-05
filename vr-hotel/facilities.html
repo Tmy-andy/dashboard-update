@@ -1,0 +1,402 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facilities - Link Hotel VR360 Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="styles/admin.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-hotel"></i></div>
+                <div class="logo-text">Link Hotel VR</div>
+            </div>
+        </div>
+        <div class="property-selector">
+            <div class="property-label">Khách sạn hiện tại</div>
+            <div class="property-name">Link Hotel VR360</div>
+        </div>
+        
+        <!-- Dashboard Switcher will be injected here -->
+        <div id="dashboard-switcher-container"></div>
+
+        <nav class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title">MANAGEMENT</div>
+                <a href="index.html" class="nav-item"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="introduction.html" class="nav-item"><i class="fas fa-info-circle"></i> Introduction</a>
+                <a href="rooms.html" class="nav-item"><i class="fas fa-bed"></i> Rooms</a>
+                <a href="dining.html" class="nav-item"><i class="fas fa-utensils"></i> Dining</a>
+                <a href="vouchers.html" class="nav-item"><i class="fas fa-ticket-alt"></i> Offers</a>
+                <a href="facilities.html" class="nav-item active"><i class="fas fa-swimming-pool"></i> Facilities</a>
+                <a href="policies.html" class="nav-item"><i class="fas fa-file-contract"></i> Policies</a>
+                <a href="rules.html" class="nav-item"><i class="fas fa-book-open"></i> Rules</a>
+                <a href="contact.html" class="nav-item"><i class="fas fa-phone"></i> Contact</a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">SETTINGS</div>
+                <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i> Settings</a>
+                <a href="https://hotel-vr-demo.netlify.app/" class="nav-item" target="_blank"><i class="fas fa-eye"></i>
+                    View Website</a>
+                <a href="#" class="nav-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <h1 class="page-title">Facilities</h1>
+        </div>
+        <div class="header-right">
+            <div class="user-menu">
+                <div class="user-avatar">AD</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="alert alert-success hidden" id="successAlert">
+            <i class="fas fa-check-circle"></i>
+            <span id="successMessage">Đã lưu thành công!</span>
+        </div>
+
+        <!-- Status Card -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title">Display Status - Section Facilities</div>
+                <div class="toggle-container">
+                    <span class="toggle-status active" id="sectionStatus">Đang hiển thị</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="sectionToggle" checked onchange="toggleSection()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Facilities List -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title">List Facilities</div>
+                <button class="btn btn-primary" onclick="addFacility()">
+                    <i class="fas fa-plus"></i> Thêm Facilities mới
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="facilitiesList"></div>
+            </div>
+        </div>
+
+        <!-- Facility Edit Modal -->
+        <div class="modal" id="facilityModal" style="display: none;">
+            <div class="modal-content" style="max-width: 800px;">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Thêm Facilities mới</h3>
+                    <button class="close-btn" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="language-tabs">
+                        <button class="language-tab active" onclick="switchLang('vi')">Tiếng Việt</button>
+                        <button class="language-tab" onclick="switchLang('en')">English</button>
+                    </div>
+
+                    <!-- Vietnamese Content -->
+                    <div class="lang-content active" id="lang-vi">
+                        <div class="form-group">
+                            <label class="form-label">Tên Facilities (VI) <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="nameVi" placeholder="VD: Bể bơi vô cực">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Mô tả (VI)</label>
+                            <textarea class="form-textarea" id="descVi" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- English Content -->
+                    <div class="lang-content" id="lang-en">
+                        <div class="form-group">
+                            <label class="form-label">Facility Name (EN) <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="nameEn" placeholder="E.g: Infinity Pool">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description (EN)</label>
+                            <textarea class="form-textarea" id="descEn" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Icon</label>
+                            <select class="form-select" id="icon">
+                                <option value="fa-swimming-pool">Bể bơi</option>
+                                <option value="fa-spa">Spa</option>
+                                <option value="fa-dumbbell">Gym</option>
+                                <option value="fa-parking">Bãi đỗ xe</option>
+                                <option value="fa-wifi">WiFi</option>
+                                <option value="fa-concierge-bell">Lễ tân 24/7</option>
+                                <option value="fa-utensils">Nhà hàng</option>
+                                <option value="fa-cocktail">Bar</option>
+                                <option value="fa-briefcase">Phòng họp</option>
+                                <option value="fa-gamepad">Khu vui chơi</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Vị trí</label>
+                            <input type="text" class="form-input" id="location" placeholder="VD: Tầng 10">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Giá dịch vụ (VNĐ)</label>
+                            <input type="number" class="form-input" id="price" placeholder="0">
+                            <p class="form-help">Để 0 nếu miễn phí</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Giờ mở cửa</label>
+                        <textarea class="form-textarea" id="openingHours" rows="2"
+                            placeholder="VD: 6:00 - 22:00 hàng ngày"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-vr-cardboard"></i> Link VR360 Panorama</label>
+                        <input type="url" class="form-input" id="vrLink"
+                            placeholder="https://example.com/facility-vr.jpg">
+                        <p class="form-help">Nhập URL ảnh panorama 360° của Facilities</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="toggle-container">
+                            <input type="checkbox" id="facilityActive" checked>
+                            <span>Hiển thị Facilities này trên trang web</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeModal()">Hủy</button>
+                    <button class="btn btn-primary" onclick="saveFacility()">Lưu Facilities</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let facilities = [
+            {
+                id: 1,
+                nameVi: 'Bể bơi vô cực',
+                nameEn: 'Infinity Pool',
+                descVi: 'Bể bơi vô cực trên tầng thượng với view biển 360°',
+                descEn: 'Rooftop infinity pool with 360° ocean view',
+                icon: 'fa-swimming-pool',
+                location: 'Tầng 10',
+                price: 0,
+                openingHours: '6:00 - 22:00 hàng ngày',
+                vrLink: 'https://example.com/pool-vr.jpg',
+                active: true
+            },
+            {
+                id: 2,
+                nameVi: 'Spa & Wellness Center',
+                nameEn: 'Spa & Wellness Center',
+                descVi: 'Trung tâm chăm sóc sức khỏe và sắc đẹp cao cấp',
+                descEn: 'Premium health and beauty care center',
+                icon: 'fa-spa',
+                location: 'Tầng 2',
+                price: 500000,
+                openingHours: '8:00 - 21:00',
+                vrLink: 'https://example.com/spa-vr.jpg',
+                active: true
+            }
+        ];
+
+        let currentFacilityId = null;
+        let sectionEnabled = true;
+
+        function init() {
+            renderFacilities();
+        }
+
+        function toggleSection() {
+            sectionEnabled = document.getElementById('sectionToggle').checked;
+            const status = document.getElementById('sectionStatus');
+            const inputs = document.querySelectorAll('.form-input, .form-textarea, .form-select, input[type="checkbox"]');
+
+            if (sectionEnabled) {
+                status.textContent = 'Đang hiển thị';
+                status.className = 'toggle-status active';
+                inputs.forEach(input => input.disabled = false);
+            } else {
+                status.textContent = 'Đã ẩn';
+                status.className = 'toggle-status inactive';
+                inputs.forEach(input => input.disabled = true);
+            }
+        }
+
+        function renderFacilities() {
+            const container = document.getElementById('facilitiesList');
+            if (facilities.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#64748b; padding:40px;">Chưa có Facilities nào. Click "Thêm Facilities mới" để bắt đầu.</p>';
+                return;
+            }
+
+            container.innerHTML = facilities.map(f => `
+                <div class="room-card">
+                    <div class="room-info">
+                        <h3><i class="fas ${f.icon}"></i> ${f.nameVi} / ${f.nameEn}</h3>
+                        <div class="room-meta">
+                            <span><i class="fas fa-map-marker-alt"></i> ${f.location}</span>
+                            <span><i class="fas fa-tag"></i> ${f.price === 0 ? 'Miễn phí' : formatPrice(f.price)}</span>
+                            <span><i class="fas fa-clock"></i> ${f.openingHours}</span>
+                            <span style="color: ${f.active ? '#059669' : '#dc2626'}">
+                                <i class="fas fa-circle" style="font-size: 8px;"></i>
+                                ${f.active ? 'Đang hiển thị' : 'Đã ẩn'}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="room-actions">
+                        <button class="btn btn-secondary" onclick="editFacility(${f.id})">
+                            <i class="fas fa-edit"></i> Sửa
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteFacility(${f.id})">
+                            <i class="fas fa-trash"></i> Xóa
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function formatPrice(price) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+        }
+
+        function addFacility() {
+            if (!sectionEnabled) {
+                alert('Vui lòng bật hiển thị Section Facilities trước khi thêm Facilities mới');
+                return;
+            }
+            currentFacilityId = null;
+            document.getElementById('modalTitle').textContent = 'Thêm Facilities mới';
+            clearForm();
+            document.getElementById('facilityModal').style.display = 'flex';
+        }
+
+        function editFacility(id) {
+            currentFacilityId = id;
+            const f = facilities.find(f => f.id === id);
+            if (!f) return;
+
+            document.getElementById('modalTitle').textContent = 'Chỉnh sửa Facilities';
+            document.getElementById('nameVi').value = f.nameVi;
+            document.getElementById('nameEn').value = f.nameEn;
+            document.getElementById('descVi').value = f.descVi;
+            document.getElementById('descEn').value = f.descEn;
+            document.getElementById('icon').value = f.icon;
+            document.getElementById('location').value = f.location;
+            document.getElementById('price').value = f.price;
+            document.getElementById('openingHours').value = f.openingHours;
+            document.getElementById('vrLink').value = f.vrLink;
+            document.getElementById('facilityActive').checked = f.active;
+
+            document.getElementById('facilityModal').style.display = 'flex';
+        }
+
+        function deleteFacility(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa Facilities này?')) {
+                facilities = facilities.filter(f => f.id !== id);
+                renderFacilities();
+                showSuccess('Đã xóa Facilities thành công');
+            }
+        }
+
+        function saveFacility() {
+            const nameVi = document.getElementById('nameVi').value;
+            const nameEn = document.getElementById('nameEn').value;
+
+            if (!nameVi || !nameEn) {
+                alert('Vui lòng điền tên Facilities bằng cả 2 ngôn ngữ');
+                return;
+            }
+
+            const facilityData = {
+                nameVi, nameEn,
+                descVi: document.getElementById('descVi').value,
+                descEn: document.getElementById('descEn').value,
+                icon: document.getElementById('icon').value,
+                location: document.getElementById('location').value,
+                price: parseInt(document.getElementById('price').value) || 0,
+                openingHours: document.getElementById('openingHours').value,
+                vrLink: document.getElementById('vrLink').value,
+                active: document.getElementById('facilityActive').checked
+            };
+
+            if (currentFacilityId) {
+                const index = facilities.findIndex(f => f.id === currentFacilityId);
+                facilities[index] = { ...facilities[index], ...facilityData };
+                showSuccess('Đã cập nhật Facilities thành công');
+            } else {
+                facilityData.id = facilities.length > 0 ? Math.max(...facilities.map(f => f.id)) + 1 : 1;
+                facilities.push(facilityData);
+                showSuccess('Đã thêm Facilities mới thành công');
+            }
+
+            closeModal();
+            renderFacilities();
+        }
+
+        function clearForm() {
+            ['nameVi', 'nameEn', 'descVi', 'descEn', 'location', 'price', 'openingHours', 'vrLink'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            document.getElementById('icon').value = 'fa-swimming-pool';
+            document.getElementById('facilityActive').checked = true;
+        }
+
+        function closeModal() {
+            document.getElementById('facilityModal').style.display = 'none';
+        }
+
+        function switchLang(lang) {
+            document.querySelectorAll('.language-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            document.querySelectorAll('.lang-content').forEach(content => content.classList.remove('active'));
+            document.getElementById('lang-' + lang).classList.add('active');
+        }
+
+        function showSuccess(message) {
+            const alert = document.getElementById('successAlert');
+            document.getElementById('successMessage').textContent = message;
+            alert.classList.remove('hidden');
+            setTimeout(() => alert.classList.add('hidden'), 3000);
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+
+    <!-- Auth & Dashboard Switcher Scripts -->
+    <script src="../shared/auth.js"></script>
+    <script src="../shared/upgrade-modal.js"></script>
+    <script src="../shared/dashboard-switcher.js"></script>
+    <script>
+        Auth.checkDashboardAccess('vr-hotel');
+        initDashboardSwitcher('vr-hotel');
+        function logout() { if (confirm('B?n c� ch?c ch?n mu?n dang xu?t?')) { Auth.logout(); } }
+    </script>
+</body>
+
+</html>

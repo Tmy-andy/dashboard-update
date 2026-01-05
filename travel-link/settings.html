@@ -1,0 +1,1408 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - HotelLink360</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        /* Base styles (reused) */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 250px;
+            right: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .breadcrumb {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 200;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .property-selector {
+            margin: 16px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .property-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+
+        .property-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #0f172a;
+        }
+
+        .nav-menu {
+            padding: 8px;
+        }
+
+        .nav-section {
+            margin-bottom: 24px;
+        }
+
+        .nav-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            padding: 0 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            margin-bottom: 2px;
+            border-radius: 6px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .nav-item.active {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+        }
+
+        .nav-item i {
+            width: 18px;
+            text-align: center;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            margin-top: 64px;
+            padding: 24px;
+            min-height: calc(100vh - 64px);
+        }
+
+        /* Settings specific styles */
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .settings-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .settings-subtitle {
+            color: #64748b;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .settings-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+            padding: 4px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow-x: auto;
+        }
+
+        .settings-tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #64748b;
+            transition: all 0.2s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .settings-tab:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .settings-tab.active {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Setting Cards */
+        .settings-grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        .setting-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .setting-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .setting-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .setting-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+        }
+
+        .setting-description {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .color-picker-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .color-input-wrapper {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .color-input {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .color-swatch {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+        }
+
+        .color-input input[type="color"] {
+            width: 24px;
+            height: 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .color-value {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 12px;
+            color: #64748b;
+            flex: 1;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 28px;
+            background: #e2e8f0;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .toggle-switch.active {
+            background: #3b82f6;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(20px);
+        }
+
+        /* Language Selection */
+        .language-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .language-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .language-option:hover {
+            border-color: #3b82f6;
+            background: #f8fafc;
+        }
+
+        .language-option.active {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .language-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .language-flag {
+            width: 24px;
+            height: 18px;
+            border-radius: 2px;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .language-details h4 {
+            font-size: 14px;
+            font-weight: 500;
+            color: #0f172a;
+            margin-bottom: 2px;
+        }
+
+        .language-native {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .language-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: transparent;
+            transition: all 0.2s;
+        }
+
+        .language-option.active .language-checkbox {
+            border-color: #3b82f6;
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Action Buttons */
+        .setting-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary {
+            background: #f8fafc;
+            color: #374151;
+            border: 1px solid #e2e8f0;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: #f1f5f9;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: #dcfce7;
+            color: #166534;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #bbf7d0;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+            
+            .header {
+                left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .color-picker-group {
+                flex-direction: column;
+            }
+            
+            .language-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .settings-tabs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+            }
+        }
+
+        .nav-item.logout {
+            color: #ef4444;
+            font-weight: 500;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .nav-item.logout:hover {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-hotel"></i>
+                </div>
+                <div class="logo-text">HotelLink360</div>
+            </div>
+        </div>
+
+        <div class="property-selector">
+            <div class="property-label">Current Property</div>
+            <div class="property-name">Travel Link Hotel</div></div>
+        
+        <!-- Dashboard Switcher will be injected here -->
+        <div id="dashboard-switcher-container"></div>
+
+        <nav class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+                <a href="categories.html" class="nav-item">
+                    <i class="fas fa-layer-group"></i>
+                    Categories
+                </a>
+                <a href="features.html" class="nav-item">
+                    <i class="fas fa-puzzle-piece"></i>
+                    Features
+                </a>
+                <a href="properties.html" class="nav-item">
+                    <i class="fas fa-building"></i>
+                    Properties
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Content</div>
+                <a href="media.html" class="nav-item">
+                    <i class="fas fa-images"></i>
+                    Media Library
+                </a>
+                <a href="analytics.html" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    Analytics
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Management</div>
+                <a href="users.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    Users & Roles
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </a>
+                <a href="../login.html" class="nav-item logout" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <h1 class="page-title">Settings</h1>
+            <div class="breadcrumb">Home / Settings</div>
+        </div>
+        
+        <div class="header-right">
+            <button class="btn-primary" onclick="saveAllSettings()">
+                <i class="fas fa-save"></i>
+                Save Changes
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="settings-header">
+            <div>
+                <h2 class="settings-title">Property Settings</h2>
+                <p class="settings-subtitle">Configure your hotel property settings and preferences</p>
+            </div>
+        </div>
+
+        <!-- Settings Tabs -->
+        <div class="settings-tabs">
+            <button class="settings-tab active" data-tab="general">
+                <i class="fas fa-cog"></i>
+                General
+            </button>
+            <button class="settings-tab" data-tab="branding">
+                <i class="fas fa-palette"></i>
+                Branding
+            </button>
+            <button class="settings-tab" data-tab="localization">
+                <i class="fas fa-globe"></i>
+                Localization
+            </button>
+            <button class="settings-tab" data-tab="contact">
+                <i class="fas fa-address-card"></i>
+                Contact Info
+            </button>
+            <button class="settings-tab" data-tab="advanced">
+                <i class="fas fa-sliders-h"></i>
+                Advanced
+            </button>
+        </div>
+
+        <!-- General Settings -->
+        <div class="tab-content active" id="tab-general">
+            <div class="settings-grid">
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <div class="setting-title">
+                            <div class="setting-icon" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+                                <i class="fas fa-hotel"></i>
+                            </div>
+                            Basic Information
+                        </div>
+                    </div>
+                    <div class="setting-description">
+                        Configure basic property information and display settings.
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Property Name</label>
+                        <input type="text" class="form-input" value="Travel Link Hotel" id="propertyName">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Property Code</label>
+                        <input type="text" class="form-input" value="tabi-tower" id="propertyCode">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Slogan</label>
+                        <input type="text" class="form-input" placeholder="Your hotel's tagline" id="propertySlogan">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-input form-textarea" placeholder="Brief description of your property" id="propertyDescription"></textarea>
+                    </div>
+
+                    <div class="setting-actions">
+                        <button class="btn-secondary">Reset</button>
+                        <button class="btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Branding Settings -->
+        <div class="tab-content" id="tab-branding">
+            <div class="settings-grid">
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <div class="setting-title">
+                            <div class="setting-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                                <i class="fas fa-palette"></i>
+                            </div>
+                            Brand Colors
+                        </div>
+                    </div>
+                    <div class="setting-description">
+                        Customize your brand colors that will be used throughout your property pages.
+                    </div>
+
+                    <div class="color-picker-group">
+                        <div class="color-input-wrapper">
+                            <label class="form-label">Primary Color</label>
+                            <div class="color-input">
+                                <input type="color" value="#3b82f6" id="primaryColor">
+                                <div class="color-value">#3b82f6</div>
+                            </div>
+                        </div>
+                        <div class="color-input-wrapper">
+                            <label class="form-label">Secondary Color</label>
+                            <div class="color-input">
+                                <input type="color" value="#64748b" id="secondaryColor">
+                                <div class="color-value">#64748b</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Logo URL</label>
+                        <input type="url" class="form-input" placeholder="https://example.com/logo.png" id="logoUrl">
+                    </div>
+
+                    <div class="setting-actions">
+                        <button class="btn-secondary">Reset</button>
+                        <button class="btn-primary">Save</button>
+                    </div>
+                </div>
+
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <div class="setting-title">
+                            <div class="setting-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                                <i class="fas fa-copyright"></i>
+                            </div>
+                            Legal & Footer
+                        </div>
+                    </div>
+                    <div class="setting-description">
+                        Configure copyright text and legal links for your property pages.
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Copyright Text</label>
+                        <input type="text" class="form-input" placeholder="� 2024 Your Hotel Name" id="copyrightText">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Terms & Conditions URL</label>
+                        <input type="url" class="form-input" placeholder="https://example.com/terms" id="termsUrl">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Privacy Policy URL</label>
+                        <input type="url" class="form-input" placeholder="https://example.com/privacy" id="privacyUrl">
+                    </div>
+
+                    <div class="setting-actions">
+                        <button class="btn-secondary">Reset</button>
+                        <button class="btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Localization Settings -->
+        <div class="tab-content" id="tab-localization">
+            <div class="settings-grid">
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <div class="setting-title">
+                            <div class="setting-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            Language Settings
+                        </div>
+                    </div>
+                    <div class="setting-description">
+                        Configure supported languages for your property. Select languages you want to provide content in.
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Default Language</label>
+                        <select class="form-select" id="defaultLanguage">
+                            <option value="en">English</option>
+                            <option value="vi">Ti?ng Vi?t</option>
+                            <option value="ja">???</option>
+                            <option value="ko">???</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Fallback Language</label>
+                        <select class="form-select" id="fallbackLanguage">
+                            <option value="en" selected>English</option>
+                            <option value="vi">Ti?ng Vi?t</option>
+                            <option value="ja">???</option>
+                            <option value="ko">???</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Supported Languages</label>
+                        <div class="language-grid">
+                            <div class="language-option active" data-locale="en">
+                                <div class="language-info">
+                                    <div class="language-flag">????</div>
+                                    <div class="language-details">
+                                        <h4>English</h4>
+                                        <div class="language-native">English</div>
+                                    </div>
+                                </div>
+                                <div class="language-checkbox">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+
+                            <div class="language-option active" data-locale="vi">
+                                <div class="language-info">
+                                    <div class="language-flag">????</div>
+                                    <div class="language-details">
+                                        <h4>Vietnamese</h4>
+                                        <div class="language-native">Ti?ng Vi?t</div>
+                                    </div>
+                                </div>
+                                <div class="language-checkbox">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+
+                            <div class="language-option" data-locale="ja">
+                                <div class="language-info">
+                                    <div class="language-flag">????</div>
+                                    <div class="language-details">
+                                        <h4>Japanese</h4>
+                                        <div class="language-native">???</div>
+                                    </div>
+                                </div>
+                                <div class="language-checkbox">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+
+                            <div class="language-option" data-locale="ko">
+                                <div class="language-info">
+                                    <div class="language-flag">????</div>
+                                    <div class="language-details">
+                                        <h4>Korean</h4>
+                                        <div class="language-native">???</div>
+                                    </div>
+                                </div>
+                                <div class="language-checkbox">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+
+                            <div class="language-option" data-locale="zh">
+                                <div class="language-info">
+                                    <div class="language-flag">????</div>
+                                    <div class="language-details">
+                                        <h4>Chinese (Simplified)</h4>
+                                        <div class="language-native">????</div>
+                                    </div>
+                                </div>
+                                <div class="language-checkbox">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+
+                            <div class="language-option" data-locale="fr">
+                                <div class="language-info">
+                                    <div class="language-flag">????</div>
+                                    <div class="language-details">
+                                        <h4>French</h4>
+                                        <div class="language-native">Fran�ais</div>
+                                    </div>
+                                </div>
+                                <div class="language-checkbox">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-actions">
+                        <button class="btn-secondary">Reset</button>
+                        <button class="btn-primary">Save</button>
+                    </div>
+                </div>
+
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <div class="setting-title">
+                            <div class="setting-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            Regional Settings
+                        </div>
+                    </div>
+                    <div class="setting-description">
+                        Configure timezone and regional display preferences for your property.
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Timezone</label>
+                        <select class="form-select" id="timezone">
+                            <option value="Asia/Tokyo" selected>Asia/Tokyo (GMT+9)</option>
+                            <option value="Asia/Ho_Chi_Minh">Asia/Ho Chi Minh (GMT+7)</option>
+                            <option value="Asia/Seoul">Asia/Seoul (GMT+9)</option>
+                            <option value="Asia/Shanghai">Asia/Shanghai (GMT+8)</option>
+                            <option value="UTC">UTC (GMT+0)</option>
+                            <option value="America/New_York">America/New York (GMT-5)</option>
+                            <option value="Europe/London">Europe/London (GMT+0)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Date Format</label>
+                        <select class="form-select" id="dateFormat">
+                            <option value="YYYY-MM-DD">YYYY-MM-DD (2024-03-15)</option>
+                            <option value="DD/MM/YYYY">DD/MM/YYYY (15/03/2024)</option>
+                            <option value="MM/DD/YYYY">MM/DD/YYYY (03/15/2024)</option>
+                            <option value="DD-MM-YYYY">DD-MM-YYYY (15-03-2024)</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-actions">
+                        <button class="btn-secondary">Reset</button>
+                        <button class="btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Info Settings -->
+        <div class="tab-content" id="tab-contact">
+            <div class="settings-grid">
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <div class="setting-title">
+                            <div class="setting-icon" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            Address & Location
+                        </div>
+                    </div>
+                    <div class="setting-description">
+                        Configure your property's physical address and location information.
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Street Address</label>
+                        <input type="text" class="form-input" value="3-1-6 Mita, Minato, Tokyo 108-0068" id="address">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">District</label>
+                        <input type="text" class="form-input" value="Minato" id="district">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">City</label>
+                        <input type="text" class="form-input" value="Tokyo" id="city">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Country</label>
+                        <input type="text" class="form-input" value="Japan" id="country">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Postal Code</label>
+                        <input type="text" class="form-input" value="108-0068" id="postalCode">
+                    </div>
+
+                    <div class="color-picker-group">
+                        <div class="color-input-wrapper">
+                            <label class="form-label">Latitude</label>
+                            <input type="number" class="form-input" placeholder="35.6532" step="0.0001" id="latitude">
+                        </div>
+                        <div class="color-input-wrapper">
+                            <label class="form-label">Longitude</label>
+                            <input type="number" class="form-input" placeholder="139.7390" step="0.0001" id="longitude">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Google Maps URL</label>
+                        <input type="url" class="form-input" placeholder="https://maps.google.com/..." id="googleMapUrl">
+                    </div>
+
+                    <div class="setting-actions">
+                        <button class="btn-secondary">Reset</button>
+                        <button class="btn-primary">Save</button>
+                    </div>
+                </div>
+
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <div class="setting-title">
+                            <div class="setting-icon" style="background: linear-gradient(135deg, #84cc16, #65a30d);">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            Contact Details
+                        </div>
+                    </div>
+                    <div class="setting-description">
+                        Configure contact information and communication channels.
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" class="form-input" placeholder="+81-3-1234-5678" id="phoneNumber">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-input" placeholder="info@tabitower.com" id="emailAddress">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Official Website</label>
+                        <input type="url" class="form-input" placeholder="https://tabitower.com" id="websiteUrl">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Zalo OA ID</label>
+                        <input type="text" class="form-input" placeholder="zalo_oa_id" id="zaloOaId">
+                    </div>
+
+                    <div class="setting-actions">
+                        <button class="btn-secondary">Reset</button>
+                        <button class="btn-primary">Save</button>
+                    </div>
+                </div>
+
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <div class="setting-title">
+                            <div class="setting-icon" style="background: linear-gradient(135deg, #f472b6, #ec4899);">
+                                <i class="fas fa-share-alt"></i>
+                            </div>
+                            Social Media
+                        </div>
+                    </div>
+                    <div class="setting-description">
+                        Configure your social media presence and links.
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Facebook URL</label>
+                        <input type="url" class="form-input" placeholder="https://facebook.com/tabitower" id="facebookUrl">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Instagram URL</label>
+                        <input type="url" class="form-input" placeholder="https://instagram.com/tabitower" id="instagramUrl">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">YouTube URL</label>
+                        <input type="url" class="form-input" placeholder="https://youtube.com/c/tabitower" id="youtubeUrl">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">TikTok URL</label>
+                        <input type="url" class="form-input" placeholder="https://tiktok.com/@tabitower" id="tiktokUrl">
+                    </div>
+
+                    <div class="setting-actions">
+                        <button class="btn-secondary">Reset</button>
+                        <button class="btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Settings -->
+        <div class="tab-content" id="tab-advanced">
+            <div class="settings-grid">
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <div class="setting-title">
+                            <div class="setting-icon" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            Advanced Features
+                        </div>
+                    </div>
+                    <div class="setting-description">
+                        Configure advanced features and integrations for your property.
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Intro Video URL</label>
+                        <input type="url" class="form-input" placeholder="https://youtube.com/watch?v=..." id="introVideoUrl">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">360� Virtual Tour URL</label>
+                        <input type="url" class="form-input" placeholder="https://example.com/360tour" id="vr360Url">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Banner Images (JSON)</label>
+                        <textarea class="form-input form-textarea" placeholder='["image1.jpg", "image2.jpg"]' id="bannerImages"></textarea>
+                    </div>
+
+                    <div class="setting-actions">
+                        <button class="btn-secondary">Reset</button>
+                        <button class="btn-primary">Save</button>
+                    </div>
+                </div>
+
+                <div class="setting-card">
+                    <div class="setting-header">
+                        <div class="setting-title">
+                            <div class="setting-icon" style="background: linear-gradient(135deg, #71717a, #52525b);">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            System Settings
+                        </div>
+                    </div>
+                    <div class="setting-description">
+                        Configure system-level settings and preferences.
+                    </div>
+
+                    <div class="form-group">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <label class="form-label" style="margin-bottom: 4px;">Auto Language Detection</label>
+                                <div style="font-size: 12px; color: #64748b;">Automatically detect visitor's preferred language</div>
+                            </div>
+                            <div class="toggle-switch active" data-setting="autoLanguageDetection"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <label class="form-label" style="margin-bottom: 4px;">Analytics Tracking</label>
+                                <div style="font-size: 12px; color: #64748b;">Enable visitor analytics and tracking</div>
+                            </div>
+                            <div class="toggle-switch active" data-setting="analyticsTracking"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <label class="form-label" style="margin-bottom: 4px;">Cache System</label>
+                                <div style="font-size: 12px; color: #64748b;">Enable content caching for better performance</div>
+                            </div>
+                            <div class="toggle-switch active" data-setting="cacheSystem"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <label class="form-label" style="margin-bottom: 4px;">Property Active</label>
+                                <div style="font-size: 12px; color: #64748b;">Enable/disable this property entirely</div>
+                            </div>
+                            <div class="toggle-switch active" data-setting="propertyActive"></div>
+                        </div>
+                    </div>
+
+                    <div class="setting-actions">
+                        <button class="btn-secondary">Reset</button>
+                        <button class="btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">
+        <i class="fas fa-check-circle"></i>
+        Settings saved successfully!
+    </div>
+
+    <script>
+        // Tab switching
+        document.querySelectorAll('.settings-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs and contents
+                document.querySelectorAll('.settings-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                this.classList.add('active');
+                document.getElementById(`tab-${this.dataset.tab}`).classList.add('active');
+            });
+        });
+
+        // Language selection
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
+
+        // Toggle switches
+        document.querySelectorAll('.toggle-switch').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
+
+        // Color picker updates
+        document.getElementById('primaryColor').addEventListener('change', function() {
+            this.parentElement.querySelector('.color-value').textContent = this.value;
+        });
+
+        document.getElementById('secondaryColor').addEventListener('change', function() {
+            this.parentElement.querySelector('.color-value').textContent = this.value;
+        });
+
+        // Save individual setting sections
+        document.querySelectorAll('.setting-actions .btn-primary').forEach(btn => {
+            btn.addEventListener('click', function() {
+                showSuccessMessage('Settings saved successfully!');
+            });
+        });
+
+        // Save all settings
+        function saveAllSettings() {
+            const settings = {
+                general: {
+                    propertyName: document.getElementById('propertyName').value,
+                    propertyCode: document.getElementById('propertyCode').value,
+                    propertySlogan: document.getElementById('propertySlogan').value,
+                    propertyDescription: document.getElementById('propertyDescription').value,
+                },
+                branding: {
+                    primaryColor: document.getElementById('primaryColor').value,
+                    secondaryColor: document.getElementById('secondaryColor').value,
+                    logoUrl: document.getElementById('logoUrl').value,
+                    copyrightText: document.getElementById('copyrightText').value,
+                    termsUrl: document.getElementById('termsUrl').value,
+                    privacyUrl: document.getElementById('privacyUrl').value,
+                },
+                localization: {
+                    defaultLanguage: document.getElementById('defaultLanguage').value,
+                    fallbackLanguage: document.getElementById('fallbackLanguage').value,
+                    supportedLanguages: Array.from(document.querySelectorAll('.language-option.active')).map(el => el.dataset.locale),
+                    timezone: document.getElementById('timezone').value,
+                    dateFormat: document.getElementById('dateFormat').value,
+                },
+                contact: {
+                    address: document.getElementById('address').value,
+                    district: document.getElementById('district').value,
+                    city: document.getElementById('city').value,
+                    country: document.getElementById('country').value,
+                    postalCode: document.getElementById('postalCode').value,
+                    latitude: document.getElementById('latitude').value,
+                    longitude: document.getElementById('longitude').value,
+                    googleMapUrl: document.getElementById('googleMapUrl').value,
+                    phoneNumber: document.getElementById('phoneNumber').value,
+                    emailAddress: document.getElementById('emailAddress').value,
+                    websiteUrl: document.getElementById('websiteUrl').value,
+                    zaloOaId: document.getElementById('zaloOaId').value,
+                    facebookUrl: document.getElementById('facebookUrl').value,
+                    instagramUrl: document.getElementById('instagramUrl').value,
+                    youtubeUrl: document.getElementById('youtubeUrl').value,
+                    tiktokUrl: document.getElementById('tiktokUrl').value,
+                },
+                advanced: {
+                    introVideoUrl: document.getElementById('introVideoUrl').value,
+                    vr360Url: document.getElementById('vr360Url').value,
+                    bannerImages: document.getElementById('bannerImages').value,
+                    autoLanguageDetection: document.querySelector('[data-setting="autoLanguageDetection"]').classList.contains('active'),
+                    analyticsTracking: document.querySelector('[data-setting="analyticsTracking"]').classList.contains('active'),
+                    cacheSystem: document.querySelector('[data-setting="cacheSystem"]').classList.contains('active'),
+                    propertyActive: document.querySelector('[data-setting="propertyActive"]').classList.contains('active'),
+                }
+            };
+
+            console.log('All settings:', settings);
+            showSuccessMessage('All settings saved successfully!');
+            
+            // In real implementation, send data to server
+        }
+
+        // Reset functions
+        document.querySelectorAll('.setting-actions .btn-secondary').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to reset these settings?')) {
+                    // Reset logic here
+                    showSuccessMessage('Settings reset to default values.');
+                }
+            });
+        });
+
+        // Show success message
+        function showSuccessMessage(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Auto-save functionality (optional)
+        let autoSaveTimeout;
+        document.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(input => {
+            input.addEventListener('input', function() {
+                clearTimeout(autoSaveTimeout);
+                autoSaveTimeout = setTimeout(() => {
+                    console.log('Auto-saving...', this.id, this.value);
+                }, 2000);
+            });
+        });
+    </script>
+
+    <!-- Auth & Dashboard Switcher Scripts -->
+    <script src="../shared/auth.js"></script>
+    <script src="../shared/upgrade-modal.js"></script>
+    <script src="../shared/dashboard-switcher.js"></script>
+    <script>
+        console.log('=== Travel Link Page Script Executing ===');
+        console.log('DOM readyState:', document.readyState);
+        console.log('Auth object:', typeof Auth);
+        console.log('initDashboardSwitcher function:', typeof initDashboardSwitcher);
+        
+        // Execute immediately if DOM is already loaded, otherwise wait
+        if (document.readyState === 'loading') {
+            console.log('Waiting for DOMContentLoaded...');
+            document.addEventListener('DOMContentLoaded', initPage);
+        } else {
+            console.log('DOM already loaded, executing immediately');
+            initPage();
+        }
+        
+        function initPage() {
+            console.log('=== initPage called ===');
+            Auth.checkDashboardAccess('travel-link');
+            console.log('Calling initDashboardSwitcher...');
+            initDashboardSwitcher('travel-link');
+            console.log('initDashboardSwitcher call complete');
+        }
+        
+        function logout() { 
+            if(confirm('Are you sure you want to logout?')) { 
+                Auth.logout(); 
+            } 
+        }
+    </script>
+</body>
+</html>

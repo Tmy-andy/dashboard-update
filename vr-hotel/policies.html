@@ -1,0 +1,413 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Policies - Link Hotel VR360 Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="styles/admin.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-hotel"></i></div>
+                <div class="logo-text">Link Hotel VR</div>
+            </div>
+        </div>
+        <div class="property-selector">
+            <div class="property-label">Current Hotel</div>
+            <div class="property-name">Link Hotel VR360</div>
+        </div>
+        
+        <!-- Dashboard Switcher will be injected here -->
+        <div id="dashboard-switcher-container"></div>
+
+        <nav class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title">MANAGEMENT</div>
+                <a href="index.html" class="nav-item"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="introduction.html" class="nav-item"><i class="fas fa-info-circle"></i> Introduction</a>
+                <a href="rooms.html" class="nav-item"><i class="fas fa-bed"></i> Rooms</a>
+                <a href="dining.html" class="nav-item"><i class="fas fa-utensils"></i> Dining</a>
+                <a href="vouchers.html" class="nav-item"><i class="fas fa-ticket-alt"></i> Offers</a>
+                <a href="facilities.html" class="nav-item"><i class="fas fa-swimming-pool"></i> Facilities</a>
+                <a href="policies.html" class="nav-item active"><i class="fas fa-file-contract"></i> Policies</a>
+                <a href="rules.html" class="nav-item"><i class="fas fa-book-open"></i> Rules</a>
+                <a href="contact.html" class="nav-item"><i class="fas fa-phone"></i> Contact</a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">SETTINGS</div>
+                <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i> Settings</a>
+                <a href="https://hotel-vr-demo.netlify.app/" class="nav-item" target="_blank"><i class="fas fa-eye"></i>
+                    View Website</a>
+                <a href="#" class="nav-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <h1 class="page-title">Policies</h1>
+        </div>
+        <div class="header-right">
+            <div class="user-menu">
+                <div class="user-avatar">AD</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="alert alert-success hidden" id="successAlert">
+            <i class="fas fa-check-circle"></i>
+            <span id="successMessage">Đã lưu thành công!</span>
+        </div>
+
+        <!-- Status Card -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title">Display Status - Section Policies</div>
+                <div class="toggle-container">
+                    <span class="toggle-status active" id="sectionStatus">Đang hiển thị</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="sectionToggle" checked onchange="toggleSection()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Policies List -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title">List Policies</div>
+                <button class="btn btn-primary" onclick="addPolicy()">
+                    <i class="fas fa-plus"></i> Thêm Policies mới
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="policiesList"></div>
+            </div>
+        </div>
+
+        <!-- Policy Edit Modal -->
+        <div class="modal" id="policyModal" style="display: none;">
+            <div class="modal-content" style="max-width: 800px;">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Thêm Policies mới</h3>
+                    <button class="close-btn" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="language-tabs">
+                        <button class="language-tab active" onclick="switchLang('vi')">Tiếng Việt</button>
+                        <button class="language-tab" onclick="switchLang('en')">English</button>
+                    </div>
+
+                    <!-- Vietnamese Content -->
+                    <div class="lang-content active" id="lang-vi">
+                        <div class="form-group">
+                            <label class="form-label">Tên Policies (VI) <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="titleVi"
+                                placeholder="VD: Policies nhận/trả phòng">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nội dung (VI) <span class="required">*</span></label>
+                            <textarea class="form-textarea" id="contentVi" rows="6"
+                                placeholder="Nhập nội dung chi tiết Policies..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- English Content -->
+                    <div class="lang-content" id="lang-en">
+                        <div class="form-group">
+                            <label class="form-label">Policy Title (EN) <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="titleEn"
+                                placeholder="E.g: Check-in/Check-out Policy">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Content (EN) <span class="required">*</span></label>
+                            <textarea class="form-textarea" id="contentEn" rows="6"
+                                placeholder="Enter detailed policy content..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Loại Policies</label>
+                            <select class="form-select" id="category">
+                                <option value="checkin">Nhận/Trả phòng</option>
+                                <option value="cancellation">Hủy Bookings</option>
+                                <option value="payment">Thanh toán</option>
+                                <option value="children">Trẻ em</option>
+                                <option value="pets">Thú cưng</option>
+                                <option value="smoking">Hút thuốc</option>
+                                <option value="other">Khác</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Icon</label>
+                            <select class="form-select" id="icon">
+                                <option value="fa-clock">Đồng hồ</option>
+                                <option value="fa-ban">Cấm</option>
+                                <option value="fa-credit-card">Thẻ thanh toán</option>
+                                <option value="fa-child">Trẻ em</option>
+                                <option value="fa-dog">Thú cưng</option>
+                                <option value="fa-smoking">Hút thuốc</option>
+                                <option value="fa-info-circle">Thông tin</option>
+                                <option value="fa-exclamation-triangle">Cảnh báo</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Thứ tự hiển thị</label>
+                            <input type="number" class="form-input" id="order" value="1" min="1">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="toggle-container">
+                            <input type="checkbox" id="policyActive" checked>
+                            <span>Hiển thị Policies này trên trang web</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeModal()">Hủy</button>
+                    <button class="btn btn-primary" onclick="savePolicy()">Lưu Policies</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let policies = [
+            {
+                id: 1,
+                titleVi: 'Policies nhận/trả phòng',
+                titleEn: 'Check-in/Check-out Policy',
+                contentVi: '- Giờ nhận phòng: Từ 14:00\n- Giờ trả phòng: Trước 12:00\n- Nhận phòng sớm/trả phòng muộn tùy thuộc vào tình trạng phòng trống',
+                contentEn: '- Check-in time: From 14:00\n- Check-out time: Before 12:00\n- Early check-in/late check-out subject to availability',
+                category: 'checkin',
+                icon: 'fa-clock',
+                order: 1,
+                active: true
+            },
+            {
+                id: 2,
+                titleVi: 'Policies hủy Bookings',
+                titleEn: 'Cancellation Policy',
+                contentVi: '- Hủy miễn phí: Trước 24 giờ so với giờ nhận phòng\n- Hủy trễ hoặc không đến: Phí 1 đêm\n- Bookings không hoàn tiền: Không được hủy hoặc hoàn tiền',
+                contentEn: '- Free cancellation: Before 24 hours of check-in time\n- Late cancellation or no-show: 1 night charge\n- Non-refundable bookings: No cancellation or refund',
+                category: 'cancellation',
+                icon: 'fa-ban',
+                order: 2,
+                active: true
+            },
+            {
+                id: 3,
+                titleVi: 'Policies thanh toán',
+                titleEn: 'Payment Policy',
+                contentVi: '- Chấp nhận: Tiền mặt, thẻ tín dụng (Visa, Master, JCB)\n- Đặt cọc: 30% tổng giá trị Bookings\n- Thanh toán đầy đủ khi nhận phòng',
+                contentEn: '- Accepted: Cash, Credit cards (Visa, Master, JCB)\n- Deposit: 30% of total booking value\n- Full payment upon check-in',
+                category: 'payment',
+                icon: 'fa-credit-card',
+                order: 3,
+                active: true
+            }
+        ];
+
+        let currentPolicyId = null;
+        let sectionEnabled = true;
+
+        const categoryLabels = {
+            checkin: 'Nhận/Trả phòng',
+            cancellation: 'Hủy Bookings',
+            payment: 'Thanh toán',
+            children: 'Trẻ em',
+            pets: 'Thú cưng',
+            smoking: 'Hút thuốc',
+            other: 'Khác'
+        };
+
+        function init() {
+            renderPolicies();
+        }
+
+        function toggleSection() {
+            sectionEnabled = document.getElementById('sectionToggle').checked;
+            const status = document.getElementById('sectionStatus');
+            const inputs = document.querySelectorAll('.form-input, .form-textarea, .form-select, input[type="checkbox"]');
+
+            if (sectionEnabled) {
+                status.textContent = 'Đang hiển thị';
+                status.className = 'toggle-status active';
+                inputs.forEach(input => input.disabled = false);
+            } else {
+                status.textContent = 'Đã ẩn';
+                status.className = 'toggle-status inactive';
+                inputs.forEach(input => input.disabled = true);
+            }
+        }
+
+        function renderPolicies() {
+            const container = document.getElementById('policiesList');
+            if (policies.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#64748b; padding:40px;">Chưa có Policies nào. Click "Thêm Policies mới" để bắt đầu.</p>';
+                return;
+            }
+
+            const sortedPolicies = [...policies].sort((a, b) => a.order - b.order);
+
+            container.innerHTML = sortedPolicies.map(p => `
+                <div class="room-card">
+                    <div class="room-info">
+                        <h3><i class="fas ${p.icon}"></i> ${p.titleVi} / ${p.titleEn}</h3>
+                        <div class="room-meta">
+                            <span><i class="fas fa-tag"></i> ${categoryLabels[p.category]}</span>
+                            <span><i class="fas fa-sort-numeric-down"></i> Thứ tự: ${p.order}</span>
+                            <span style="color: ${p.active ? '#059669' : '#dc2626'}">
+                                <i class="fas fa-circle" style="font-size: 8px;"></i>
+                                ${p.active ? 'Đang hiển thị' : 'Đã ẩn'}
+                            </span>
+                        </div>
+                        <div style="margin-top: 10px; padding: 10px; background: #f8fafc; border-radius: 8px;">
+                            <p style="margin: 0; white-space: pre-line; color: #475569; font-size: 14px;">${p.contentVi}</p>
+                        </div>
+                    </div>
+                    <div class="room-actions">
+                        <button class="btn btn-secondary" onclick="editPolicy(${p.id})">
+                            <i class="fas fa-edit"></i> Sửa
+                        </button>
+                        <button class="btn btn-danger" onclick="deletePolicy(${p.id})">
+                            <i class="fas fa-trash"></i> Xóa
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addPolicy() {
+            if (!sectionEnabled) {
+                alert('Vui lòng bật hiển thị Section Policies trước khi thêm Policies mới');
+                return;
+            }
+            currentPolicyId = null;
+            document.getElementById('modalTitle').textContent = 'Thêm Policies mới';
+            clearForm();
+            document.getElementById('policyModal').style.display = 'flex';
+        }
+
+        function editPolicy(id) {
+            currentPolicyId = id;
+            const p = policies.find(p => p.id === id);
+            if (!p) return;
+
+            document.getElementById('modalTitle').textContent = 'Chỉnh sửa Policies';
+            document.getElementById('titleVi').value = p.titleVi;
+            document.getElementById('titleEn').value = p.titleEn;
+            document.getElementById('contentVi').value = p.contentVi;
+            document.getElementById('contentEn').value = p.contentEn;
+            document.getElementById('category').value = p.category;
+            document.getElementById('icon').value = p.icon;
+            document.getElementById('order').value = p.order;
+            document.getElementById('policyActive').checked = p.active;
+
+            document.getElementById('policyModal').style.display = 'flex';
+        }
+
+        function deletePolicy(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa Policies này?')) {
+                policies = policies.filter(p => p.id !== id);
+                renderPolicies();
+                showSuccess('Đã xóa Policies thành công');
+            }
+        }
+
+        function savePolicy() {
+            const titleVi = document.getElementById('titleVi').value;
+            const titleEn = document.getElementById('titleEn').value;
+            const contentVi = document.getElementById('contentVi').value;
+            const contentEn = document.getElementById('contentEn').value;
+
+            if (!titleVi || !titleEn || !contentVi || !contentEn) {
+                alert('Please fill in title and content in both languages');
+                return;
+            }
+
+            const policyData = {
+                titleVi, titleEn, contentVi, contentEn,
+                category: document.getElementById('category').value,
+                icon: document.getElementById('icon').value,
+                order: parseInt(document.getElementById('order').value) || 1,
+                active: document.getElementById('policyActive').checked
+            };
+
+            if (currentPolicyId) {
+                const index = policies.findIndex(p => p.id === currentPolicyId);
+                policies[index] = { ...policies[index], ...policyData };
+                showSuccess('Đã cập nhật Policies thành công');
+            } else {
+                policyData.id = policies.length > 0 ? Math.max(...policies.map(p => p.id)) + 1 : 1;
+                policies.push(policyData);
+                showSuccess('Đã thêm Policies mới thành công');
+            }
+
+            closeModal();
+            renderPolicies();
+        }
+
+        function clearForm() {
+            ['titleVi', 'titleEn', 'contentVi', 'contentEn'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            document.getElementById('category').value = 'checkin';
+            document.getElementById('icon').value = 'fa-clock';
+            document.getElementById('order').value = '1';
+            document.getElementById('policyActive').checked = true;
+        }
+
+        function closeModal() {
+            document.getElementById('policyModal').style.display = 'none';
+        }
+
+        function switchLang(lang) {
+            document.querySelectorAll('.language-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            document.querySelectorAll('.lang-content').forEach(content => content.classList.remove('active'));
+            document.getElementById('lang-' + lang).classList.add('active');
+        }
+
+        function showSuccess(message) {
+            const alert = document.getElementById('successAlert');
+            document.getElementById('successMessage').textContent = message;
+            alert.classList.remove('hidden');
+            setTimeout(() => alert.classList.add('hidden'), 3000);
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+
+    <!-- Auth & Dashboard Switcher Scripts -->
+    <script src="../shared/auth.js"></script>
+    <script src="../shared/upgrade-modal.js"></script>
+    <script src="../shared/dashboard-switcher.js"></script>
+    <script>
+        Auth.checkDashboardAccess('vr-hotel');
+        initDashboardSwitcher('vr-hotel');
+        function logout() { if (confirm('B?n c� ch?c ch?n mu?n dang xu?t?')) { Auth.logout(); } }
+    </script>
+</body>
+
+</html>

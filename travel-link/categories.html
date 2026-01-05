@@ -1,0 +1,1789 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories - HotelLink360</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        /* Reuse base styles from index */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 250px;
+            right: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .breadcrumb {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 200;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .property-selector {
+            margin: 16px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .property-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+
+        .property-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #0f172a;
+        }
+
+        .nav-menu {
+            padding: 8px;
+        }
+
+        .nav-section {
+            margin-bottom: 24px;
+        }
+
+        .nav-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            padding: 0 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            margin-bottom: 2px;
+            border-radius: 6px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .nav-item.active {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+        }
+
+        .nav-item i {
+            width: 18px;
+            text-align: center;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            margin-top: 64px;
+            padding: 24px;
+            min-height: calc(100vh - 64px);
+        }
+
+        /* Categories specific styles */
+        .categories-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .categories-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .categories-subtitle {
+            color: #64748b;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .search-filter-bar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            background: #f8fafc;
+        }
+
+        .filter-select {
+            padding: 10px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+            min-width: 150px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .category-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .category-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .category-menu {
+            position: relative;
+        }
+
+        .category-menu-btn {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .category-menu-btn:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .category-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .category-description {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .category-stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 16px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .category-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #374151;
+            border: 1px solid #e2e8f0;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .btn-danger {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-danger:hover {
+            background: #fee2e2;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-inactive {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        .system-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #eff6ff;
+            color: #2563eb;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .close-btn:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .icon-selector {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .icon-option {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #f8fafc;
+        }
+
+        .icon-option:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .icon-option.selected {
+            border-color: #3b82f6;
+            background: #3b82f6;
+            color: white;
+        }
+
+        .language-tabs {
+            display: flex;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .language-tab {
+            padding: 8px 16px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-size: 14px;
+            color: #64748b;
+            transition: all 0.2s;
+        }
+
+        .language-tab.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn-cancel {
+            background: #f8fafc;
+            color: #374151;
+            border: 1px solid #e2e8f0;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancel:hover {
+            background: #f1f5f9;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .empty-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            background: #f8fafc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            font-size: 24px;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .empty-description {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+            
+            .header {
+                left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        /* Modal form decoration */
+        .form-input, .form-textarea {
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 10px;
+            width: 100%;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-input:focus, .form-textarea:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+            outline: none;
+        }
+
+        .btn-save {
+            background: #3b82f6;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-save:hover {
+            background: #2563eb;
+        }
+
+        /* Translate Modal - FIXED STYLES */
+        .translate-modal {
+            display: none;
+            position: fixed;
+            top: 0; 
+            left: 0;
+            width: 100%; 
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .translate-modal.show {
+            display: flex;
+        }
+
+        .translate-modal .modal-content {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Language tabs for translate modal */
+        .lang-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 5px;
+            align-items: center;
+        }
+
+        .lang-tabs .language-tab {
+            padding: 6px 12px;
+            border-radius: 6px 6px 0 0;
+            background: #f3f4f6;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .lang-tabs .language-tab.active {
+            background: #3b82f6;
+            color: #fff;
+        }
+
+        .lang-tabs .language-tab:hover {
+            background: #e5e7eb;
+        }
+
+        .lang-tabs .language-tab.active:hover {
+            background: #2563eb;
+        }
+
+        .btn-add-lang {
+            background: #10b981;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+        }
+
+        .lang-add-wrapper {
+            position: relative;
+        }
+
+        .lang-dropdown {
+            display: none;
+            position: absolute;
+            top: 35px;
+            left: 0;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 99;
+        }
+
+        .lang-add-wrapper.show .lang-dropdown {
+            display: block;
+        }
+
+        .lang-dropdown button {
+            display: block;
+            width: 100%;
+            padding: 6px 12px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .lang-dropdown button:hover {
+            background: #f3f4f6;
+        }
+
+        /* Content box */
+        .content-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .content-box.success {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+        }
+
+        /* Language content */
+        .lang-content {
+            display: none;
+        }
+
+        .lang-content.active {
+            display: block;
+        }
+
+        .content-box.editable {
+            border: 1px solid #38bdf8;
+            background: #f0f9ff;
+        }
+        .content-box.editable:focus-within {
+            outline: 2px solid #0ea5e9;
+            background: #e0f2fe;
+        }
+
+        .nav-item.logout {
+            color: #ef4444;
+            font-weight: 500;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .nav-item.logout:hover {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-hotel"></i>
+                </div>
+                <div class="logo-text">HotelLink360</div>
+            </div>
+        </div>
+
+        <div class="property-selector">
+            <div class="property-label">Current Property</div>
+            <div class="property-name">Travel Link Hotel</div></div>
+        
+        <!-- Dashboard Switcher will be injected here -->
+        <div id="dashboard-switcher-container"></div>
+
+        <nav class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <a href="index.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </a>
+                <a href="categories.html" class="nav-item active">
+                    <i class="fas fa-layer-group"></i>
+                    Categories
+                </a>
+                <a href="features.html" class="nav-item">
+                    <i class="fas fa-puzzle-piece"></i>
+                    Features
+                </a>
+                <a href="properties.html" class="nav-item">
+                    <i class="fas fa-building"></i>
+                    Properties
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Content</div>
+                <a href="media.html" class="nav-item">
+                    <i class="fas fa-images"></i>
+                    Media Library
+                </a>
+                <a href="analytics.html" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    Analytics
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Management</div>
+                <a href="users.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    Users & Roles
+                </a>
+                <a href="settings.html" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </a>
+                <a href="../login.html" class="nav-item logout" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <h1 class="page-title">Categories</h1>
+            <div class="breadcrumb">Home / Categories</div>
+        </div>
+        
+        <div class="header-right">
+            <button class="btn-primary" onclick="openCategoryModal()">
+                <i class="fas fa-plus"></i>
+                Add Category
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="categories-header">
+            <div>
+                <h2 class="categories-title">Feature Categories</h2>
+                <p class="categories-subtitle">Organize your hotel features into logical categories</p>
+            </div>
+        </div>
+
+        <!-- Search & Filter -->
+        <div class="search-filter-bar">
+            <input type="text" class="search-input" placeholder="Search categories..." id="searchInput">
+            <select class="filter-select" id="statusFilter">
+                <option value="">All Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select>
+            <select class="filter-select" id="typeFilter">
+                <option value="">All Types</option>
+                <option value="system">System</option>
+                <option value="custom">Custom</option>
+            </select>
+        </div>
+
+        <!-- Categories Grid -->
+        <div class="categories-grid" id="categoriesGrid">
+            <!-- General Category -->
+            <div class="category-card" data-status="active" data-type="system">
+                <div class="system-badge">SYSTEM</div>
+                <div class="category-header">
+                    <div class="category-icon" style="background: #3b82f6;">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="category-menu">
+                        <button class="category-menu-btn">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="category-info">
+                    <h3>General</h3>
+                    <p class="category-description">Basic hotel information like check-in/out, policies, and general guidance</p>
+                    <div class="category-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-puzzle-piece"></i>
+                            <span class="stat-value">12</span> features
+                        </div>
+                        <div class="stat-item">
+                            <span class="status-badge status-active">Active</span>
+                        </div>
+                    </div>
+                    <div class="category-actions">
+                        <button class="btn-secondary" onclick="editCategory(1)">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn-secondary" onclick="viewFeatures(1)">
+                            <i class="fas fa-eye"></i> View Features
+                        </button>
+                        <button class="btn-secondary" onclick="translateCategory(1)">
+                            <i class="fas fa-language"></i>
+                            Translate
+                        </button>
+                        <button class="btn-danger" onclick="deleteCategory(5)">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services Category -->
+            <div class="category-card" data-status="active" data-type="system">
+                <div class="system-badge">SYSTEM</div>
+                <div class="category-header">
+                    <div class="category-icon" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+                        <i class="fas fa-concierge-bell"></i>
+                    </div>
+                    <div class="category-menu">
+                        <button class="category-menu-btn">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="category-info">
+                    <h3>Services</h3>
+                    <p class="category-description">Hotel services like room service, concierge, laundry, and guest assistance</p>
+                    <div class="category-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-puzzle-piece"></i>
+                            <span class="stat-value">21</span> features
+                        </div>
+                        <div class="stat-item">
+                            <span class="status-badge status-active">Active</span>
+                        </div>
+                    </div>
+                    <div class="category-actions">
+                        <button class="btn-secondary" onclick="editCategory(2)">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn-secondary" onclick="viewFeatures(2)">
+                            <i class="fas fa-eye"></i> View Features
+                        </button>
+                        <button class="btn-secondary" onclick="translateCategory(2)">
+                            <i class="fas fa-language"></i>
+                            Translate
+                        </button>
+                        <button class="btn-danger" onclick="deleteCategory(5)">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Facilities Category -->
+            <div class="category-card" data-status="active" data-type="system">
+                <div class="system-badge">SYSTEM</div>
+                <div class="category-header">
+                    <div class="category-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="category-menu">
+                        <button class="category-menu-btn">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="category-info">
+                    <h3>Facilities</h3>
+                    <p class="category-description">Physical facilities like spa, gym, pool, and recreational areas</p>
+                    <div class="category-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-puzzle-piece"></i>
+                            <span class="stat-value">7</span> features
+                        </div>
+                        <div class="stat-item">
+                            <span class="status-badge status-active">Active</span>
+                        </div>
+                    </div>
+                    <div class="category-actions">
+                        <button class="btn-secondary" onclick="editCategory(3)">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn-secondary" onclick="viewFeatures(3)">
+                            <i class="fas fa-eye"></i> View Features
+                        </button>
+                        <button class="btn-secondary" onclick="translateCategory(3)">
+                            <i class="fas fa-language"></i>
+                            Translate
+                        </button>
+                        <button class="btn-danger" onclick="deleteCategory(5)">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activities Category -->
+            <div class="category-card" data-status="active" data-type="system">
+                <div class="system-badge">SYSTEM</div>
+                <div class="category-header">
+                    <div class="category-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                        <i class="fas fa-hiking"></i>
+                    </div>
+                    <div class="category-menu">
+                        <button class="category-menu-btn">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="category-info">
+                    <h3>Activities</h3>
+                    <p class="category-description">Activities and entertainment options available to guests</p>
+                    <div class="category-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-puzzle-piece"></i>
+                            <span class="stat-value">8</span> features
+                        </div>
+                        <div class="stat-item">
+                            <span class="status-badge status-active">Active</span>
+                        </div>
+                    </div>
+                    <div class="category-actions">
+                        <button class="btn-secondary" onclick="editCategory(4)">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn-secondary" onclick="viewFeatures(4)">
+                            <i class="fas fa-eye"></i> View Features
+                        </button>
+                        <button class="btn-secondary" onclick="translateCategory(4)">
+                            <i class="fas fa-language"></i>
+                            Translate
+                        </button>
+                        <button class="btn-danger" onclick="deleteCategory(5)">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Custom Category Example -->
+            <div class="category-card" data-status="active" data-type="custom">
+                <div class="category-header">
+                    <div class="category-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="category-menu">
+                        <button class="category-menu-btn">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="category-info">
+                    <h3>VIP Services</h3>
+                    <p class="category-description">Premium services exclusive to VIP and suite guests</p>
+                    <div class="category-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-puzzle-piece"></i>
+                            <span class="stat-value">5</span> features
+                        </div>
+                        <div class="stat-item">
+                            <span class="status-badge status-active">Active</span>
+                        </div>
+                    </div>
+                    <div class="category-actions">
+                        <button class="btn-secondary" onclick="editCategory(5)">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn-secondary" onclick="viewFeatures(5)">
+                            <i class="fas fa-eye"></i> View Features
+                        </button>
+                        <button class="btn-secondary" onclick="translateCategory(5)">
+                            <i class="fas fa-language"></i>
+                            Translate
+                        </button>
+                        <button class="btn-danger" onclick="deleteCategory(5)">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Category Modal -->
+    <div class="modal" id="categoryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Add New Category</h3>
+                <button class="close-btn" onclick="closeCategoryModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form id="categoryForm">
+                <!-- Language Tabs -->
+                <div class="language-tabs">
+                    <button type="button" class="language-tab active" onclick="switchTab('en')">English</button>
+                    <button type="button" class="language-tab" onclick="switchTab('vi')">Ti?ng Vi?t</button>
+                    <button type="button" class="language-tab" onclick="switchTab('ja')">???</button>
+                </div>
+
+                <!-- Basic Info -->
+                <div class="form-group">
+                    <label class="form-label">Category Slug (URL-friendly identifier)</label>
+                    <input type="text" class="form-input" id="categorySlug" placeholder="e.g., vip-services" required>
+                </div>
+
+                <!-- Icon Selection -->
+                <div class="form-group">
+                    <label class="form-label">Category Icon
+                        <button type="button" class="btn-secondary" onclick="openModal('requestIconModal')" style="margin-top:8px;">
+                            <i class="fas fa-plus-circle"></i> 
+                            Y�u c?u th�m icon
+                        </button>
+                    </label>
+                    <div class="icon-selector">
+                        <div class="icon-option" data-icon="info-circle">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="icon-option" data-icon="concierge-bell">
+                            <i class="fas fa-concierge-bell"></i>
+                        </div>
+                        <div class="icon-option" data-icon="building">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="icon-option" data-icon="hiking">
+                            <i class="fas fa-hiking"></i>
+                        </div>
+                        <div class="icon-option" data-icon="car">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="icon-option" data-icon="spa">
+                            <i class="fas fa-spa"></i>
+                        </div>
+                        <div class="icon-option" data-icon="utensils">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <div class="icon-option" data-icon="shopping-bag">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <div class="icon-option" data-icon="share-alt">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                        <div class="icon-option" data-icon="file-contract">
+                            <i class="fas fa-file-contract"></i>
+                        </div>
+                        <div class="icon-option" data-icon="star">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="icon-option" data-icon="heart">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- English Content -->
+                <div class="tab-content active" id="tab-en">
+                    <div class="form-group">
+                        <label class="form-label">Title (English)</label>
+                        <input type="text" class="form-input" id="titleEn" placeholder="Category title" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description (English)</label>
+                        <textarea class="form-input form-textarea" id="descEn" placeholder="Brief description of this category"></textarea>
+                    </div>
+                </div>
+
+                <!-- Vietnamese Content -->
+                <div class="tab-content" id="tab-vi">
+                    <div class="form-group">
+                        <label class="form-label">Title (Vietnamese)</label>
+                        <input type="text" class="form-input" id="titleVi" placeholder="Ti�u d? danh m?c">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description (Vietnamese)</label>
+                        <textarea class="form-input form-textarea" id="descVi" placeholder="M� t? ng?n v? danh m?c n�y"></textarea>
+                    </div>
+                </div>
+
+                <!-- Japanese Content -->
+                <div class="tab-content" id="tab-ja">
+                    <div class="form-group">
+                        <label class="form-label">Title (Japanese)</label>
+                        <input type="text" class="form-input" id="titleJa" placeholder="????????">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description (Japanese)</label>
+                        <textarea class="form-input form-textarea" id="descJa" placeholder="????????????"></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeCategoryModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Request New Icon Modal -->
+    <div class="modal" id="requestIconModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-paper-plane" style="color:#3b82f6;"></i>
+                    Request New Icon
+                </h3>
+                <button class="close-btn" onclick="closeModal('requestIconModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form id="requestIconForm">
+                <div class="form-group">
+                    <label class="form-label">Your Email</label>
+                    <input 
+                        type="email" 
+                        class="form-input" 
+                        id="requesterEmail" 
+                        placeholder="you@example.com" 
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Icon Name / Idea</label>
+                    <input 
+                        type="text" 
+                        class="form-input" 
+                        id="iconName" 
+                        placeholder="e.g., Shuttle Bus, Rooftop Bar" 
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description (optional)</label>
+                    <textarea 
+                        class="form-textarea" 
+                        id="iconDescription" 
+                        rows="3" 
+                        placeholder="Describe how the icon should look or where it will be used...">
+                    </textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('requestIconModal')">Cancel</button>
+                    <button type="submit" class="btn-save">
+                        <i class="fas fa-paper-plane"></i> Send Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Translate Modal -->
+    <div class="translate-modal" id="translateModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-language"></i> AI Translation</h3>
+                <button class="close-btn" onclick="closeTranslateModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Language tabs -->
+            <div class="lang-tabs" id="translateLangTabs">
+                <div class="language-tab active" data-lang="vi">???? VI</div>
+                <div class="language-tab" data-lang="en">???? EN</div>
+                <div class="language-tab" data-lang="ja">???? JP</div>
+                <div class="lang-add-wrapper">
+                    <button class="btn-add-lang" type="button" onclick="toggleLangDropdown()">+</button>
+                    <div class="lang-dropdown"></div>
+                </div>
+            </div>
+
+            <!-- Content for each language -->
+            <div class="lang-contents" id="translateLangContents">
+                <div class="lang-content active" data-lang="vi">
+                    <div class="form-group">
+                        <label class="form-label">Original Content (EN):</label>
+                        <div class="content-box">
+                            <div id="originalContent">
+                                <strong>Hotel Check-in Guidelines</strong><br>
+                                Welcome to Travel Link Hotel! Our check-in process is designed to be smooth and efficient...
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">AI Translation (VI):</label>
+                        <div class="content-box success editable">
+                            <div id="translatedContent" contenteditable="true">
+                                <strong>Hu?ng d?n Nh?n ph�ng Kh�ch s?n</strong><br>
+                                Ch�o m?ng qu� kh�ch d?n v?i Kh�ch s?n Travel Link! Quy tr�nh nh?n ph�ng c?a ch�ng t�i...
+                            </div>
+                        </div>
+                        <small class="note">B?n c� th? ch?nh s?a b?n d?ch tr?c ti?p t?i d�y.</small>
+                    </div>
+                </div>
+
+                <div class="lang-content" data-lang="en">
+                    <div class="form-group">
+                        <label class="form-label">Original Content (VI):</label>
+                        <div class="content-box">
+                            <div>
+                                <strong>Hu?ng d?n Nh?n ph�ng Kh�ch s?n</strong><br>
+                                Ch�o m?ng qu� kh�ch d?n v?i Kh�ch s?n Travel Link...
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">AI Translation (EN):</label>
+                        <div class="content-box success editable">
+                            <div>
+                                <strong>Hotel Check-in Guidelines</strong><br>
+                                Welcome to Travel Link Hotel! Our check-in process is designed...
+                            </div>
+                        </div>
+                        <small class="note">B?n c� th? ch?nh s?a b?n d?ch tr?c ti?p t?i d�y.</small>
+                    </div>
+                </div>
+
+                <div class="lang-content" data-lang="ja">
+                    <div class="form-group">
+                        <label class="form-label">Original Content (EN):</label>
+                        <div class="content-box">
+                            <div>
+                                <strong>Hotel Check-in Guidelines</strong><br>
+                                Welcome to Travel Link Hotel...
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">AI Translation (JP):</label>
+                        <div class="content-box success editable">
+                            <div>
+                                <strong>???????????????</strong><br>
+                                ?????????????!???????????????...
+                            </div>
+                        </div>
+                        <small class="note">B?n c� th? ch?nh s?a b?n d?ch tr?c ti?p t?i d�y.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeTranslateModal()">Cancel</button>
+                <button type="button" class="btn-primary" onclick="regenerateTranslation()">
+                    <i class="fas fa-redo"></i> Regenerate
+                </button>
+                <button type="button" class="btn-save" onclick="acceptTranslation()">
+                    <i class="fas fa-check"></i> Use Translation
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedIcon = '';
+
+        // Modal functions
+        function openCategoryModal() {
+            document.getElementById('categoryModal').classList.add('show');
+            document.getElementById('modalTitle').textContent = 'Add New Category';
+            document.getElementById('categoryForm').reset();
+            selectedIcon = '';
+            document.querySelectorAll('.icon-option').forEach(el => el.classList.remove('selected'));
+        }
+
+        function closeCategoryModal() {
+            document.getElementById('categoryModal').classList.remove('show');
+        }
+
+        function editCategory(id) {
+            document.getElementById('categoryModal').classList.add('show');
+            document.getElementById('modalTitle').textContent = 'Edit Category';
+            
+            // Pre-fill form with existing data (mock data)
+            if (id === 1) {
+                document.getElementById('categorySlug').value = 'general';
+                document.getElementById('titleEn').value = 'General';
+                document.getElementById('descEn').value = 'Basic hotel information like check-in/out, policies, and general guidance';
+                selectIcon('info-circle');
+            }
+        }
+
+        function deleteCategory(id) {
+            if (confirm('Are you sure you want to delete this category? This action cannot be undone.')) {
+                alert(`Category ${id} deleted successfully!`);
+                // Remove from DOM
+                event.target.closest('.category-card').remove();
+            }
+        }
+
+        function viewFeatures(id) {
+            window.location.href = `features.html?category=${id}`;
+        }
+
+        // Tab switching
+        function switchTab(lang) {
+            // Remove active class from all tabs and contents
+            document.querySelectorAll('.language-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to selected tab and content
+            event.target.classList.add('active');
+            document.getElementById(`tab-${lang}`).classList.add('active');
+        }
+
+        // Icon selection
+        document.querySelectorAll('.icon-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.icon-option').forEach(el => el.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedIcon = this.dataset.icon;
+            });
+        });
+
+        function selectIcon(iconName) {
+            document.querySelectorAll('.icon-option').forEach(el => el.classList.remove('selected'));
+            document.querySelector(`[data-icon="${iconName}"]`).classList.add('selected');
+            selectedIcon = iconName;
+        }
+
+        // Form submission
+        document.getElementById('categoryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!selectedIcon) {
+                alert('Please select an icon for the category');
+                return;
+            }
+            
+            const formData = {
+                slug: document.getElementById('categorySlug').value,
+                icon: selectedIcon,
+                translations: {
+                    en: {
+                        title: document.getElementById('titleEn').value,
+                        description: document.getElementById('descEn').value
+                    },
+                    vi: {
+                        title: document.getElementById('titleVi').value,
+                        description: document.getElementById('descVi').value
+                    },
+                    ja: {
+                        title: document.getElementById('titleJa').value,
+                        description: document.getElementById('descJa').value
+                    }
+                }
+            };
+            
+            console.log('Category data:', formData);
+            alert('Category saved successfully!');
+            closeCategoryModal();
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            filterCategories();
+        });
+
+        document.getElementById('statusFilter').addEventListener('change', filterCategories);
+        document.getElementById('typeFilter').addEventListener('change', filterCategories);
+
+        function filterCategories() {
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value;
+            
+            document.querySelectorAll('.category-card').forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const description = card.querySelector('.category-description').textContent.toLowerCase();
+                const status = card.dataset.status;
+                const type = card.dataset.type;
+                
+                const matchesSearch = title.includes(searchQuery) || description.includes(searchQuery);
+                const matchesStatus = !statusFilter || status === statusFilter;
+                const matchesType = !typeFilter || type === typeFilter;
+                
+                if (matchesSearch && matchesStatus && matchesType) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('categoryModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCategoryModal();
+            }
+        });
+
+        // Auto-generate slug from title
+        document.getElementById('titleEn').addEventListener('input', function() {
+            const slug = this.value.toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .trim();
+            document.getElementById('categorySlug').value = slug;
+        });
+
+        // Modal functions
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'flex';
+                document.body.classList.add("modal-open");
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.classList.remove("modal-open");
+            }
+        }
+
+        // Handle request icon form
+        document.getElementById('requestIconForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('requesterEmail').value;
+            const name = document.getElementById('iconName').value;
+            const description = document.getElementById('iconDescription').value;
+
+            console.log("?? Send request:", { email, name, description });
+
+            alert("Your request has been sent successfully!");
+            closeModal('requestIconModal');
+        });
+
+        // FIXED TRANSLATE MODAL FUNCTIONS
+        function translateCategory(id) {
+            const modal = document.getElementById('translateModal');
+            if (!modal) return console.error("Translate modal not found!");
+            modal.classList.add('show');
+            modal.setAttribute('data-id', id);
+        }   
+
+        function closeTranslateModal() {
+            const modal = document.getElementById('translateModal');
+            if (!modal) return;
+            modal.classList.remove('show');
+        }
+
+        // Close translate modal on background click
+        document.getElementById('translateModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeTranslateModal();
+            }
+        });
+
+        // Language tab switching for translate modal
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('language-tab') && e.target.closest('#translateLangTabs')) {
+                const lang = e.target.dataset.lang;
+                // Remove active from all tabs and contents
+                document.querySelectorAll('#translateLangTabs .language-tab').forEach(tab => tab.classList.remove('active'));
+                document.querySelectorAll('#translateLangContents .lang-content').forEach(content => content.classList.remove('active'));
+                
+                // Add active to selected
+                e.target.classList.add('active');
+                const targetContent = document.querySelector(`#translateLangContents .lang-content[data-lang="${lang}"]`);
+                if (targetContent) {
+                    targetContent.classList.add('active');
+                }
+            }
+        });
+
+        // Available languages
+        const AVAILABLE_LANGS = [
+            { code: 'vi', flag: '????', label: 'Vietnamese' },
+            { code: 'en', flag: '????', label: 'English' },
+            { code: 'ja', flag: '????', label: 'Japanese' },
+            { code: 'kr', flag: '????', label: 'Korean' },
+            { code: 'fr', flag: '????', label: 'French' }
+        ];
+
+        function toggleLangDropdown() {
+            const wrapper = document.querySelector('.lang-add-wrapper');
+            if (!wrapper) return;
+            const dropdown = wrapper.querySelector('.lang-dropdown');
+            if (!dropdown) return;
+
+            const existing = Array.from(document.querySelectorAll('#translateLangTabs .language-tab'))
+                .map(t => t.dataset.lang);
+
+            dropdown.innerHTML = '';
+            AVAILABLE_LANGS.forEach(lang => {
+                if (!existing.includes(lang.code)) {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.innerText = `${lang.flag} ${lang.label}`;
+                    btn.onclick = () => addLanguageTab(lang.code, lang.flag, lang.label);
+                    dropdown.appendChild(btn);
+                }
+            });
+
+            if (dropdown.children.length === 0) {
+                dropdown.innerHTML = `<div class="empty">All available languages added</div>`;
+            }
+
+            wrapper.classList.toggle('show');
+        }
+
+        // Close language dropdown when clicking outside
+        document.addEventListener('click', function (e) {
+            const wrapper = document.querySelector('.lang-add-wrapper');
+            if (!wrapper) return;
+            if (!wrapper.contains(e.target)) wrapper.classList.remove('show');
+        });
+
+        function addLanguageTab(code, flag, label) {
+            const tabs = document.getElementById('translateLangTabs');
+            const contents = document.getElementById('translateLangContents');
+
+            if (tabs.querySelector(`[data-lang="${code}"]`)) return;
+
+            const addWrapper = tabs.querySelector('.lang-add-wrapper');
+            const newTab = document.createElement('div');
+            newTab.className = 'language-tab';
+            newTab.dataset.lang = code;
+            newTab.innerText = `${flag} ${code.toUpperCase()}`;
+            tabs.insertBefore(newTab, addWrapper);
+
+            const newContent = document.createElement('div');
+            newContent.className = 'lang-content';
+            newContent.dataset.lang = code;
+            newContent.innerHTML = `
+                <div class="form-group">
+                    <label class="form-label">Original Content (EN):</label>
+                    <div class="content-box">
+                        <div>
+                            <strong>Sample Category Content</strong><br>
+                            This is sample content for translation...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">AI Translation (${code.toUpperCase()}):</label>
+                    <div class="content-box success">
+                        <div>
+                            Translated content will appear here...
+                        </div>
+                    </div>
+                </div>
+            `;
+            contents.appendChild(newContent);
+
+            // Switch to new tab
+            document.querySelectorAll('#translateLangTabs .language-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('#translateLangContents .lang-content').forEach(content => content.classList.remove('active'));
+            newTab.classList.add('active');
+            newContent.classList.add('active');
+
+            // Close dropdown
+            document.querySelector('.lang-add-wrapper').classList.remove('show');
+        }
+
+        function regenerateTranslation() {
+            alert('Regenerating translation...');
+        }
+
+        function acceptTranslation() {
+            alert('Translation accepted and saved!');
+            closeTranslateModal();
+        }
+
+        function saveTranslation(lang) {
+            const box = document.querySelector(`.lang-content[data-lang="${lang}"] [contenteditable="true"]`);
+            if (box) {
+                const updated = box.innerHTML.trim();
+                console.log("Saved translation for", lang, ":", updated);
+                showNotification(`Translation for ${lang} saved!`, "success");
+            }
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            const logoutBtn = document.getElementById("logoutBtn");
+            if (logoutBtn) {
+                logoutBtn.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    if (confirm("Are you sure you want to logout?")) {
+                        Auth.logout();
+                    }
+                });
+            }
+        });
+        
+    </script>
+
+    <!-- Auth & Dashboard Switcher Scripts -->
+    <script src="../shared/auth.js"></script>
+    <script src="../shared/upgrade-modal.js"></script>
+    <script src="../shared/dashboard-switcher.js"></script>
+    <script>
+        console.log('=== Travel Link Page Script Executing ===');
+        console.log('DOM readyState:', document.readyState);
+        
+        // Execute immediately if DOM is already loaded, otherwise wait
+        if (document.readyState === 'loading') {
+            console.log('Waiting for DOMContentLoaded...');
+            document.addEventListener('DOMContentLoaded', initPage);
+        } else {
+            console.log('DOM already loaded, executing immediately');
+            initPage();
+        }
+        
+        function initPage() {
+            console.log('=== initPage called ===');
+            Auth.checkDashboardAccess('travel-link');
+            console.log('Calling initDashboardSwitcher...');
+            initDashboardSwitcher('travel-link');
+            console.log('initDashboardSwitcher call complete');
+        }
+        function logout() { if(confirm('Are you sure you want to logout?')) { Auth.logout(); } }
+    </script>
+</body>
+</html>

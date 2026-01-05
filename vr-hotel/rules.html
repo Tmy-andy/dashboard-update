@@ -1,0 +1,420 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rules - Link Hotel VR360 Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="styles/admin.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-hotel"></i></div>
+                <div class="logo-text">Link Hotel VR</div>
+            </div>
+        </div>
+        <div class="property-selector">
+            <div class="property-label">Khách sạn hiện tại</div>
+            <div class="property-name">Link Hotel VR360</div>
+        </div>
+        
+        <!-- Dashboard Switcher will be injected here -->
+        <div id="dashboard-switcher-container"></div>
+
+        <nav class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title">MANAGEMENT</div>
+                <a href="index.html" class="nav-item"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="introduction.html" class="nav-item"><i class="fas fa-info-circle"></i> Introduction</a>
+                <a href="rooms.html" class="nav-item"><i class="fas fa-bed"></i> Rooms</a>
+                <a href="dining.html" class="nav-item"><i class="fas fa-utensils"></i> Dining</a>
+                <a href="vouchers.html" class="nav-item"><i class="fas fa-ticket-alt"></i> Offers</a>
+                <a href="facilities.html" class="nav-item"><i class="fas fa-swimming-pool"></i> Facilities</a>
+                <a href="policies.html" class="nav-item"><i class="fas fa-file-contract"></i> Policies</a>
+                <a href="rules.html" class="nav-item active"><i class="fas fa-book-open"></i> Rules</a>
+                <a href="contact.html" class="nav-item"><i class="fas fa-phone"></i> Contact</a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">SETTINGS</div>
+                <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i> Settings</a>
+                <a href="https://hotel-vr-demo.netlify.app/" class="nav-item" target="_blank"><i class="fas fa-eye"></i>
+                    View Website</a>
+                <a href="#" class="nav-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <h1 class="page-title">Rules</h1>
+        </div>
+        <div class="header-right">
+            <div class="user-menu">
+                <div class="user-avatar">AD</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="alert alert-success hidden" id="successAlert">
+            <i class="fas fa-check-circle"></i>
+            <span id="successMessage">Đã lưu thành công!</span>
+        </div>
+
+        <!-- Status Card -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title">Display Status - Section Rules</div>
+                <div class="toggle-container">
+                    <span class="toggle-status active" id="sectionStatus">Đang hiển thị</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="sectionToggle" checked onchange="toggleSection()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rules List -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title">List Rules</div>
+                <button class="btn btn-primary" onclick="addRule()">
+                    <i class="fas fa-plus"></i> Thêm Rules mới
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="rulesList"></div>
+            </div>
+        </div>
+
+        <!-- Rule Edit Modal -->
+        <div class="modal" id="ruleModal" style="display: none;">
+            <div class="modal-content" style="max-width: 800px;">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Thêm Rules mới</h3>
+                    <button class="close-btn" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="language-tabs">
+                        <button class="language-tab active" onclick="switchLang('vi')">Tiếng Việt</button>
+                        <button class="language-tab" onclick="switchLang('en')">English</button>
+                    </div>
+
+                    <!-- Vietnamese Content -->
+                    <div class="lang-content active" id="lang-vi">
+                        <div class="form-group">
+                            <label class="form-label">Tiêu đề (VI) <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="titleVi" placeholder="VD: Giữ gìn vệ sinh chung">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nội dung (VI) <span class="required">*</span></label>
+                            <textarea class="form-textarea" id="contentVi" rows="4"
+                                placeholder="Nhập nội dung chi tiết Rules..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- English Content -->
+                    <div class="lang-content" id="lang-en">
+                        <div class="form-group">
+                            <label class="form-label">Title (EN) <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="titleEn"
+                                placeholder="E.g: Keep common areas clean">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Content (EN) <span class="required">*</span></label>
+                            <textarea class="form-textarea" id="contentEn" rows="4"
+                                placeholder="Enter detailed rule content..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Loại Rules</label>
+                            <select class="form-select" id="priority">
+                                <option value="info" style="color: #3b82f6;">Thông tin</option>
+                                <option value="warning" style="color: #f59e0b;">Cảnh báo</option>
+                                <option value="mandatory" style="color: #ef4444;">Bắt buộc</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Icon</label>
+                            <select class="form-select" id="icon">
+                                <option value="fa-info-circle">Thông tin</option>
+                                <option value="fa-exclamation-triangle">Cảnh báo</option>
+                                <option value="fa-exclamation-circle">Quan trọng</option>
+                                <option value="fa-ban">Cấm</option>
+                                <option value="fa-volume-mute">Im lặng</option>
+                                <option value="fa-smoking-ban">Cấm hút thuốc</option>
+                                <option value="fa-user-lock">Bảo mật</option>
+                                <option value="fa-shield-alt">An toàn</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Thứ tự hiển thị</label>
+                            <input type="number" class="form-input" id="order" value="1" min="1">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="toggle-container">
+                            <input type="checkbox" id="ruleActive" checked>
+                            <span>Hiển thị Rules này trên trang web</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeModal()">Hủy</button>
+                    <button class="btn btn-primary" onclick="saveRule()">Lưu Rules</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let rules = [
+            {
+                id: 1,
+                titleVi: 'Giữ trật tự và yên tĩnh',
+                titleEn: 'Keep quiet and orderly',
+                contentVi: 'Vui lòng giữ yên lặng sau 22:00 để tôn trọng sự nghỉ ngơi của khách khác. Tránh gây ồn ào tại khu vực hành lang và phòng chung.',
+                contentEn: 'Please keep quiet after 22:00 to respect other guests\' rest. Avoid making noise in hallways and common areas.',
+                priority: 'mandatory',
+                icon: 'fa-volume-mute',
+                order: 1,
+                active: true
+            },
+            {
+                id: 2,
+                titleVi: 'Cấm hút thuốc trong phòng',
+                titleEn: 'No smoking in rooms',
+                contentVi: 'Nghiêm cấm hút thuốc lá trong tất cả các Rooms. Khu vực hút thuốc được chỉ định tại tầng trệt. Vi phạm sẽ bị phạt 2.000.000 VNĐ.',
+                contentEn: 'Smoking is strictly prohibited in all guest rooms. Designated smoking areas are available on the ground floor. Violation will result in a fine of 2,000,000 VND.',
+                priority: 'mandatory',
+                icon: 'fa-smoking-ban',
+                order: 2,
+                active: true
+            },
+            {
+                id: 3,
+                titleVi: 'Bảo quản tài sản khách sạn',
+                titleEn: 'Care for hotel property',
+                contentVi: 'Khách vui lòng giữ gìn và sử dụng tài sản, thiết bị của khách sạn một cách cẩn thận. Mọi hư hỏng do cố ý sẽ được bồi thường theo giá trị thực tế.',
+                contentEn: 'Guests are requested to care for and use hotel property and equipment carefully. Any intentional damage will be compensated at actual value.',
+                priority: 'warning',
+                icon: 'fa-shield-alt',
+                order: 3,
+                active: true
+            },
+            {
+                id: 4,
+                titleVi: 'Không mang thú cưng',
+                titleEn: 'No pets allowed',
+                contentVi: 'Khách sạn không cho phép mang theo thú cưng, trừ trường hợp động vật hỗ trợ được chứng nhận (cần Contact trước).',
+                contentEn: 'Pets are not allowed in the hotel, except certified service animals (prior contact required).',
+                priority: 'info',
+                icon: 'fa-ban',
+                order: 4,
+                active: true
+            }
+        ];
+
+        let currentRuleId = null;
+        let sectionEnabled = true;
+
+        const priorityLabels = {
+            info: { text: 'Thông tin', color: '#3b82f6' },
+            warning: { text: 'Cảnh báo', color: '#f59e0b' },
+            mandatory: { text: 'Bắt buộc', color: '#ef4444' }
+        };
+
+        function init() {
+            renderRules();
+        }
+
+        function toggleSection() {
+            sectionEnabled = document.getElementById('sectionToggle').checked;
+            const status = document.getElementById('sectionStatus');
+            const inputs = document.querySelectorAll('.form-input, .form-textarea, .form-select, input[type="checkbox"]');
+
+            if (sectionEnabled) {
+                status.textContent = 'Đang hiển thị';
+                status.className = 'toggle-status active';
+                inputs.forEach(input => input.disabled = false);
+            } else {
+                status.textContent = 'Đã ẩn';
+                status.className = 'toggle-status inactive';
+                inputs.forEach(input => input.disabled = true);
+            }
+        }
+
+        function renderRules() {
+            const container = document.getElementById('rulesList');
+            if (rules.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#64748b; padding:40px;">Chưa có Rules nào. Click "Thêm Rules mới" để bắt đầu.</p>';
+                return;
+            }
+
+            const sortedRules = [...rules].sort((a, b) => a.order - b.order);
+
+            container.innerHTML = sortedRules.map(r => {
+                const priorityInfo = priorityLabels[r.priority];
+                return `
+                    <div class="room-card">
+                        <div class="room-info">
+                            <h3><i class="fas ${r.icon}"></i> ${r.titleVi} / ${r.titleEn}</h3>
+                            <div class="room-meta">
+                                <span style="color: ${priorityInfo.color}">
+                                    <i class="fas fa-flag"></i> ${priorityInfo.text}
+                                </span>
+                                <span><i class="fas fa-sort-numeric-down"></i> Thứ tự: ${r.order}</span>
+                                <span style="color: ${r.active ? '#059669' : '#dc2626'}">
+                                    <i class="fas fa-circle" style="font-size: 8px;"></i>
+                                    ${r.active ? 'Đang hiển thị' : 'Đã ẩn'}
+                                </span>
+                            </div>
+                            <div style="margin-top: 10px; padding: 10px; background: #f8fafc; border-radius: 8px; border-left: 3px solid ${priorityInfo.color};">
+                                <p style="margin: 0; white-space: pre-line; color: #475569; font-size: 14px;">${r.contentVi}</p>
+                            </div>
+                        </div>
+                        <div class="room-actions">
+                            <button class="btn btn-secondary" onclick="editRule(${r.id})">
+                                <i class="fas fa-edit"></i> Sửa
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteRule(${r.id})">
+                                <i class="fas fa-trash"></i> Xóa
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addRule() {
+            if (!sectionEnabled) {
+                alert('Vui lòng bật hiển thị Section Rules trước khi thêm Rules mới');
+                return;
+            }
+            currentRuleId = null;
+            document.getElementById('modalTitle').textContent = 'Thêm Rules mới';
+            clearForm();
+            document.getElementById('ruleModal').style.display = 'flex';
+        }
+
+        function editRule(id) {
+            currentRuleId = id;
+            const r = rules.find(r => r.id === id);
+            if (!r) return;
+
+            document.getElementById('modalTitle').textContent = 'Chỉnh sửa Rules';
+            document.getElementById('titleVi').value = r.titleVi;
+            document.getElementById('titleEn').value = r.titleEn;
+            document.getElementById('contentVi').value = r.contentVi;
+            document.getElementById('contentEn').value = r.contentEn;
+            document.getElementById('priority').value = r.priority;
+            document.getElementById('icon').value = r.icon;
+            document.getElementById('order').value = r.order;
+            document.getElementById('ruleActive').checked = r.active;
+
+            document.getElementById('ruleModal').style.display = 'flex';
+        }
+
+        function deleteRule(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa Rules này?')) {
+                rules = rules.filter(r => r.id !== id);
+                renderRules();
+                showSuccess('Đã xóa Rules thành công');
+            }
+        }
+
+        function saveRule() {
+            const titleVi = document.getElementById('titleVi').value;
+            const titleEn = document.getElementById('titleEn').value;
+            const contentVi = document.getElementById('contentVi').value;
+            const contentEn = document.getElementById('contentEn').value;
+
+            if (!titleVi || !titleEn || !contentVi || !contentEn) {
+                alert('Vui lòng điền đầy đủ tiêu đề và nội dung bằng cả 2 ngôn ngữ');
+                return;
+            }
+
+            const ruleData = {
+                titleVi, titleEn, contentVi, contentEn,
+                priority: document.getElementById('priority').value,
+                icon: document.getElementById('icon').value,
+                order: parseInt(document.getElementById('order').value) || 1,
+                active: document.getElementById('ruleActive').checked
+            };
+
+            if (currentRuleId) {
+                const index = rules.findIndex(r => r.id === currentRuleId);
+                rules[index] = { ...rules[index], ...ruleData };
+                showSuccess('Đã cập nhật Rules thành công');
+            } else {
+                ruleData.id = rules.length > 0 ? Math.max(...rules.map(r => r.id)) + 1 : 1;
+                rules.push(ruleData);
+                showSuccess('Đã thêm Rules mới thành công');
+            }
+
+            closeModal();
+            renderRules();
+        }
+
+        function clearForm() {
+            ['titleVi', 'titleEn', 'contentVi', 'contentEn'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            document.getElementById('priority').value = 'info';
+            document.getElementById('icon').value = 'fa-info-circle';
+            document.getElementById('order').value = '1';
+            document.getElementById('ruleActive').checked = true;
+        }
+
+        function closeModal() {
+            document.getElementById('ruleModal').style.display = 'none';
+        }
+
+        function switchLang(lang) {
+            document.querySelectorAll('.language-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            document.querySelectorAll('.lang-content').forEach(content => content.classList.remove('active'));
+            document.getElementById('lang-' + lang).classList.add('active');
+        }
+
+        function showSuccess(message) {
+            const alert = document.getElementById('successAlert');
+            document.getElementById('successMessage').textContent = message;
+            alert.classList.remove('hidden');
+            setTimeout(() => alert.classList.add('hidden'), 3000);
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+
+    <!-- Auth & Dashboard Switcher Scripts -->
+    <script src="../shared/auth.js"></script>
+    <script src="../shared/upgrade-modal.js"></script>
+    <script src="../shared/dashboard-switcher.js"></script>
+    <script>
+        Auth.checkDashboardAccess('vr-hotel');
+        initDashboardSwitcher('vr-hotel');
+        function logout() { if (confirm('B?n c� ch?c ch?n mu?n dang xu?t?')) { Auth.logout(); } }
+    </script>
+</body>
+
+</html>

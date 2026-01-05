@@ -1,0 +1,221 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dining - Link Hotel VR360 Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="styles/admin.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-hotel"></i></div>
+                <div class="logo-text">Link Hotel VR</div>
+            </div>
+        </div>
+        <div class="property-selector">
+            <div class="property-label">Current Hotel</div>
+            <div class="property-name">Link Hotel VR360</div>
+        </div>
+        
+        <!-- Dashboard Switcher will be injected here -->
+        <div id="dashboard-switcher-container"></div>
+
+        <nav class="nav-menu">
+            <div class="nav-section">
+                <div class="nav-section-title">MANAGEMENT</div>
+                <a href="index.html" class="nav-item"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="introduction.html" class="nav-item"><i class="fas fa-info-circle"></i> Introduction</a>
+                <a href="rooms.html" class="nav-item"><i class="fas fa-bed"></i> Rooms</a>
+                <a href="dining.html" class="nav-item active"><i class="fas fa-utensils"></i> Dining</a>
+                <a href="vouchers.html" class="nav-item"><i class="fas fa-ticket-alt"></i> Offers</a>
+                <a href="facilities.html" class="nav-item"><i class="fas fa-swimming-pool"></i> Facilities</a>
+                <a href="policies.html" class="nav-item"><i class="fas fa-file-contract"></i> Policies</a>
+                <a href="rules.html" class="nav-item"><i class="fas fa-book-open"></i> Rules</a>
+                <a href="contact.html" class="nav-item"><i class="fas fa-phone"></i> Contact</a>
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">SETTINGS</div>
+                <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i> Settings</a>
+                <a href="https://hotel-vr-demo.netlify.app/" class="nav-item" target="_blank"><i class="fas fa-eye"></i>
+                    View Website</a>
+                <a href="#" class="nav-item logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <h1 class="page-title">Dining</h1>
+        </div>
+        <div class="header-right">
+            <div class="user-menu">
+                <div class="user-avatar">AD</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="alert alert-success hidden" id="successAlert">
+            <i class="fas fa-check-circle"></i>
+            <span id="successMessage">Đã lưu thành công!</span>
+        </div>
+
+        <!-- Status Card -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title">Display Status - Section Dining</div>
+                <div class="toggle-container">
+                    <span class="toggle-status active" id="sectionStatus">Đang hiển thị</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="sectionToggle" checked onchange="toggleSection()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dining List -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title">List nhà hàng / Khu vực Dining</div>
+                <button class="btn btn-primary" onclick="addDining()">
+                    <i class="fas fa-plus"></i> Thêm nhà hàng
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="diningList"></div>
+            </div>
+        </div>
+
+        <!-- Dining Edit Modal -->
+        <div class="modal" id="diningModal" style="display: none;">
+            <div class="modal-content" style="max-width: 800px;">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Thêm nhà hàng mới</h3>
+                    <button class="close-btn" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="language-tabs">
+                        <button class="language-tab active" onclick="switchLang('vi')">Tiếng Việt</button>
+                        <button class="language-tab" onclick="switchLang('en')">English</button>
+                    </div>
+
+                    <!-- Vietnamese Content -->
+                    <div class="lang-content active" id="lang-vi">
+                        <div class="form-group">
+                            <label class="form-label">Tên nhà hàng (VI) <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="nameVi" placeholder="VD: Sky Lounge Restaurant">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Mô tả (VI)</label>
+                            <textarea class="form-textarea" id="descVi" rows="3"
+                                placeholder="Mô tả về nhà hàng"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- English Content -->
+                    <div class="lang-content" id="lang-en">
+                        <div class="form-group">
+                            <label class="form-label">Restaurant Name (EN) <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="nameEn" placeholder="E.g: Sky Lounge Restaurant">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description (EN)</label>
+                            <textarea class="form-textarea" id="descEn" rows="3"
+                                placeholder="Description about restaurant"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Loại Dining</label>
+                            <select class="form-select" id="cuisineType">
+                                <option value="vietnamese">Việt Nam</option>
+                                <option value="asian">Á</option>
+                                <option value="western">Âu</option>
+                                <option value="fusion">Fusion</option>
+                                <option value="seafood">Hải sản</option>
+                                <option value="buffet">Buffet</option>
+                                <option value="cafe">Cafe & Bar</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Giá trung bình/người (VNĐ)</label>
+                            <input type="number" class="form-input" id="avgPrice" placeholder="500000">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Sức chứa (người)</label>
+                            <input type="number" class="form-input" id="capacity" placeholder="50">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Giờ phục vụ</label>
+                        <textarea class="form-textarea" id="openingHours" rows="2"
+                            placeholder="Sáng: 6:00 - 10:00&#10;Trưa: 11:30 - 14:00&#10;Tối: 18:00 - 22:00"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-vr-cardboard"></i> Link VR360 Panorama</label>
+                        <input type="url" class="form-input" id="vrLink"
+                            placeholder="https://example.com/restaurant-vr.jpg">
+                        <p class="form-help">Nhập URL ảnh panorama 360° của nhà hàng</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Dịch vụ</label>
+                        <div class="amenities-grid">
+                            <label><input type="checkbox" class="service" value="reservation"> <i
+                                    class="fas fa-calendar-check"></i> Đặt bàn online</label>
+                            <label><input type="checkbox" class="service" value="delivery"> <i
+                                    class="fas fa-motorcycle"></i> Giao hàng</label>
+                            <label><input type="checkbox" class="service" value="private"> <i
+                                    class="fas fa-door-closed"></i> Phòng riêng</label>
+                            <label><input type="checkbox" class="service" value="wifi"> <i class="fas fa-wifi"></i> WiFi
+                                miễn phí</label>
+                            <label><input type="checkbox" class="service" value="parking"> <i
+                                    class="fas fa-parking"></i> Bãi đỗ xe</label>
+                            <label><input type="checkbox" class="service" value="kids"> <i class="fas fa-child"></i> Khu
+                                vui chơi trẻ em</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="toggle-container">
+                            <input type="checkbox" id="diningActive" checked>
+                            <span>Hiển thị nhà hàng này trên trang web</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeModal()">Hủy</button>
+                    <button class="btn btn-primary" onclick="saveDining()">Lưu nhà hàng</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="scripts/dining.js"></script>
+
+    <!-- Auth & Dashboard Switcher Scripts -->
+    <script src="../shared/auth.js"></script>
+    <script src="../shared/upgrade-modal.js"></script>
+    <script src="../shared/dashboard-switcher.js"></script>
+    <script>
+        Auth.checkDashboardAccess('vr-hotel');
+        initDashboardSwitcher('vr-hotel');
+        function logout() { if (confirm('B?n c� ch?c ch?n mu?n dang xu?t?')) { Auth.logout(); } }
+    </script>
+</body>
+
+</html>
