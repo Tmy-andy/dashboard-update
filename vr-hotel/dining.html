@@ -220,7 +220,12 @@
     <script>
         Auth.checkDashboardAccess('vr-hotel');
         initDashboardSwitcher('vr-hotel');
-        function logout() { if (confirm('B?n c� ch?c ch?n mu?n dang xu?t?')) { Auth.logout(); } }
+        
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                Auth.logout();
+            }
+        }
     </script>
 </body>
 

@@ -70,7 +70,7 @@
             <div class="card-header">
                 <div class="card-title">Display Status - Section Contact</div>
                 <div class="toggle-container">
-                    <span class="toggle-status active" id="sectionStatus">Visible</span>
+                    <span class="toggle-status active" id="sectionStatus">Displaying</span>
                     <label class="toggle-switch">
                         <input type="checkbox" id="sectionToggle" checked onchange="toggleSection()">
                         <span class="toggle-slider"></span>
@@ -78,7 +78,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="alert" style="background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd;">
+                <div class="alert alert-info">
                     <i class="fas fa-info-circle"></i>
                     <span>When disabled, the Contact section will not be displayed on the website and all input fields will be disabled.</span>
                 </div>
@@ -286,7 +286,7 @@ Check-in: From 2:00 PM | Check-out: Before 12:00 PM</textarea>
             const inputs = document.querySelectorAll('.form-input, .form-textarea');
             
             if (sectionEnabled) {
-                status.textContent = 'Visible';
+                status.textContent = 'Displaying';
                 status.className = 'toggle-status active';
                 inputs.forEach(input => input.disabled = false);
             } else {

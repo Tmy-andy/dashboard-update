@@ -626,7 +626,7 @@
             <div class="card-header">
                 <div class="card-title">Display Status</div>
                 <div class="toggle-container">
-                    <span class="toggle-status active" id="displayStatus">Đang hiển thị</span>
+                    <span class="toggle-status active" id="displayStatus">Displaying</span>
                     <label class="toggle-switch">
                         <input type="checkbox" id="displayToggle" checked onchange="toggleDisplay()">
                         <span class="toggle-slider"></span>
@@ -806,11 +806,11 @@ Notably, we are the first hotel in Vung Tau to implement VR360 technology, allow
             const inputs = document.querySelectorAll('.form-input, .form-textarea, .form-select');
 
             if (toggle.checked) {
-                status.textContent = 'Đang hiển thị';
+                status.textContent = 'Displaying';
                 status.className = 'toggle-status active';
                 inputs.forEach(input => input.disabled = false);
             } else {
-                status.textContent = 'Đã ẩn';
+                status.textContent = 'Hidden';
                 status.className = 'toggle-status inactive';
                 inputs.forEach(input => input.disabled = true);
             }
@@ -894,7 +894,26 @@ Notably, we are the first hotel in Vung Tau to implement VR360 technology, allow
         }
 
         // Logout
-        function logout() {
+        
+        let sectionEnabled = true;
+
+        function toggleSection() {
+            sectionEnabled = document.getElementById('sectionToggle').checked;
+            const status = document.getElementById('sectionStatus');
+            const inputs = document.querySelectorAll('.form-input, .form-textarea, .form-select, input[type="checkbox"]:not(#sectionToggle)');
+
+            if (sectionEnabled) {
+                status.textContent = 'Displaying';
+                status.className = 'toggle-status active';
+                inputs.forEach(input => input.disabled = false);
+            } else {
+                status.textContent = 'Hidden';
+                status.className = 'toggle-status inactive';
+                inputs.forEach(input => input.disabled = true);
+            }
+        }
+
+function logout() {
             if (confirm('Are you sure you want to logout?')) {
                 Auth.logout();
             }
@@ -908,7 +927,6 @@ Notably, we are the first hotel in Vung Tau to implement VR360 technology, allow
     <script>
         Auth.checkDashboardAccess('vr-hotel');
         initDashboardSwitcher('vr-hotel');
-        function logout() { if (confirm('B?n c� ch?c ch?n mu?n dang xu?t?')) { Auth.logout(); } }
     </script>
 </body>
 

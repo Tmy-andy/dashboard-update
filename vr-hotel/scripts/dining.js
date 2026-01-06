@@ -42,14 +42,14 @@ function init() {
 function toggleSection() {
     sectionEnabled = document.getElementById('sectionToggle').checked;
     const status = document.getElementById('sectionStatus');
-    const inputs = document.querySelectorAll('.form-input, .form-textarea, .form-select, input[type="checkbox"]');
+    const inputs = document.querySelectorAll('.form-input, .form-textarea, .form-select, input[type="checkbox"]:not(#sectionToggle)');
     
     if (sectionEnabled) {
-        status.textContent = 'Đang hiển thị';
+        status.textContent = 'Displaying';
         status.className = 'toggle-status active';
         inputs.forEach(input => input.disabled = false);
     } else {
-        status.textContent = 'Đã ẩn';
+        status.textContent = 'Hidden';
         status.className = 'toggle-status inactive';
         inputs.forEach(input => input.disabled = true);
     }

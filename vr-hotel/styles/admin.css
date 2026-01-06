@@ -427,6 +427,12 @@ input:checked + .toggle-slider:before {
     border: 1px solid #6ee7b7;
 }
 
+.alert-info {
+    background: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #93c5fd;
+}
+
 .alert.hidden {
     display: none;
 }

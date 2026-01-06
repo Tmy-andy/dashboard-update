@@ -70,13 +70,20 @@
             <div class="card-header">
                 <div class="card-title">Display Status - Section Rooms</div>
                 <div class="toggle-container">
-                    <span class="toggle-status active" id="sectionStatus">Đang hiển thị</span>
+                    <span class="toggle-status active" id="sectionStatus">Displaying</span>
                     <label class="toggle-switch">
                         <input type="checkbox" id="sectionToggle" checked onchange="toggleSection()">
                         <span class="toggle-slider"></span>
                     </label>
                 </div>
             </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <span>When display is turned off, the "Rooms" section will not appear on the website and all input fields will be disabled.</span>
+                </div>
+            </div>
+        </div>
         </div>
 
         <!-- Rooms List -->
@@ -189,16 +196,9 @@
     <script src="../shared/upgrade-modal.js"></script>
     <script src="../shared/dashboard-switcher.js"></script>
     <script>
-        // Wait for DOM ready
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check authentication and dashboard access
-            Auth.checkDashboardAccess('vr-hotel');
-            
-            // Initialize dashboard switcher
-            initDashboardSwitcher('vr-hotel');
-        });
+        Auth.checkDashboardAccess('vr-hotel');
+        initDashboardSwitcher('vr-hotel');
         
-        // Update logout function
         function logout() {
             if (confirm('Are you sure you want to logout?')) {
                 Auth.logout();
