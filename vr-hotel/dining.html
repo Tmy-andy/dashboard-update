@@ -73,11 +73,17 @@
             <div class="card-header">
                 <div class="card-title">Display Status - Section Dining</div>
                 <div class="toggle-container">
-                    <span class="toggle-status active" id="sectionStatus">Đang hiển thị</span>
+                    <span class="toggle-status active" id="sectionStatus">Displaying</span>
                     <label class="toggle-switch">
                         <input type="checkbox" id="sectionToggle" checked onchange="toggleSection()">
                         <span class="toggle-slider"></span>
                     </label>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <span>When display is turned off, the "Dining" section will not appear on the website and all input fields will be disabled.</span>
                 </div>
             </div>
         </div>
@@ -85,9 +91,9 @@
         <!-- Dining List -->
         <div class="content-card">
             <div class="card-header">
-                <div class="card-title">List nhà hàng / Khu vực Dining</div>
+                <div class="card-title">Restaurant / Dining Area List</div>
                 <button class="btn btn-primary" onclick="addDining()">
-                    <i class="fas fa-plus"></i> Thêm nhà hàng
+                    <i class="fas fa-plus"></i> Add Restaurant
                 </button>
             </div>
             <div class="card-body">
