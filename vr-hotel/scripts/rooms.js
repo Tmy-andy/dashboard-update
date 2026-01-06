@@ -32,10 +32,12 @@ let rooms = [
 
 let currentRoomId = null;
 let sectionEnabled = true;
+let roomImages = []; // Store uploaded images
 
 // Initialize
 function init() {
     renderRooms();
+    setupImageUpload();
 }
 
 // Toggle section
@@ -141,8 +143,8 @@ function saveRoom() {
     const nameVi = document.getElementById('nameVi').value;
     const nameEn = document.getElementById('nameEn').value;
     
-    if (!nameVi || !nameEn) {
-        alert('Vui lòng điền tên phòng bằng cả 2 ngôn ngữ');
+    if (!nameVi && !nameEn) {
+        alert('Please enter room name in at least one language');
         return;
     }
     
@@ -190,11 +192,13 @@ function clearForm() {
     document.getElementById('maxGuests').value = '2';
     document.getElementById('vrLink').value = '';
     document.querySelectorAll('.amenity').forEach(cb => cb.checked = false);
+    clearImages();
 }
 
 // Close modal
 function closeModal() {
     document.getElementById('roomModal').style.display = 'none';
+    clearForm();
 }
 
 // Switch language tab
@@ -219,6 +223,95 @@ function logout() {
     if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
         window.location.href = 'index.html';
     }
+}
+
+// Image Upload Functions
+function setupImageUpload() {
+    const uploadArea = document.getElementById('imageUploadArea');
+    const fileInput = document.getElementById('roomImages');
+    
+    // Click to upload
+    uploadArea.addEventListener('click', () => {
+        fileInput.click();
+    });
+    
+    // File selection
+    fileInput.addEventListener('change', (e) => {
+        handleFiles(e.target.files);
+    });
+    
+    // Drag and drop
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+    
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+    
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        handleFiles(e.dataTransfer.files);
+    });
+}
+
+function handleFiles(files) {
+    const validFiles = Array.from(files).filter(file => {
+        // Check if file is an image
+        if (!file.type.startsWith('image/')) {
+            alert(`${file.name} is not an image file`);
+            return false;
+        }
+        // Check file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert(`${file.name} is too large. Max size is 5MB`);
+            return false;
+        }
+        return true;
+    });
+    
+    validFiles.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            roomImages.push({
+                file: file,
+                url: e.target.result,
+                name: file.name
+            });
+            renderImagePreviews();
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function renderImagePreviews() {
+    const container = document.getElementById('imagePreviewContainer');
+    container.innerHTML = '';
+    
+    roomImages.forEach((img, index) => {
+        const previewItem = document.createElement('div');
+        previewItem.className = 'image-preview-item';
+        previewItem.innerHTML = `
+            <img src="${img.url}" alt="${img.name}">
+            <button class="remove-image" onclick="removeImage(${index})" type="button">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        container.appendChild(previewItem);
+    });
+}
+
+function removeImage(index) {
+    roomImages.splice(index, 1);
+    renderImagePreviews();
+}
+
+function clearImages() {
+    roomImages = [];
+    renderImagePreviews();
+    document.getElementById('roomImages').value = '';
 }
 
 // Initialize on load

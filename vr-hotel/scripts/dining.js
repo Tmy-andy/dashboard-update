@@ -156,8 +156,8 @@ function saveDining() {
     const nameVi = document.getElementById('nameVi').value;
     const nameEn = document.getElementById('nameEn').value;
     
-    if (!nameVi || !nameEn) {
-        alert('Vui lòng điền tên nhà hàng bằng cả 2 ngôn ngữ');
+    if (!nameVi && !nameEn) {
+        alert('Please enter restaurant name in at least one language');
         return;
     }
     

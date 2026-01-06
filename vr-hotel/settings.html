@@ -75,13 +75,13 @@
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <label class="form-label">Hotel Name (VI) <span class="required">*</span></label>
+                    <label class="form-label">Hotel Name (VI)</label>
                     <input type="text" class="form-input" id="hotelNameVi" value="Link Hotel VR360"
                         placeholder="Tên khách sạn">
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Hotel Name (EN) <span class="required">*</span></label>
+                    <label class="form-label">Hotel Name (EN)</label>
                     <input type="text" class="form-input" id="hotelNameEn" value="Link Hotel VR360"
                         placeholder="Hotel name">
                 </div>
@@ -179,6 +179,39 @@
                         <input type="text" class="form-input" value="#3b82f6" readonly style="width: 120px;">
                         <p class="form-help" style="margin: 0;">This color will be used for buttons, links, highlights</p>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Language Management -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-title"><i class="fas fa-language"></i> Language Management</div>
+                <button class="btn btn-primary" onclick="addLanguage()">
+                    <i class="fas fa-plus"></i> Add Language
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info" style="margin-bottom: 20px;">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Manage languages for your website. Vietnamese is the default language and cannot be removed.</span>
+                </div>
+
+                <div id="languagesList">
+                    <!-- Default Language - Vietnamese only -->
+                    <div class="language-item" style="display: flex; align-items: center; justify-content: space-between; padding: 16px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; background: #f8fafc;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <i class="fas fa-check-circle" style="color: #10b981; font-size: 20px;"></i>
+                            <div>
+                                <div style="font-weight: 600; color: #0f172a;">Vietnamese (VI)</div>
+                                <div style="font-size: 12px; color: #64748b;">Default language - Cannot be removed</div>
+                            </div>
+                        </div>
+                        <span class="badge" style="background: #10b981; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">Active</span>
+                    </div>
+
+                    <!-- Additional Languages will be added here (including English) -->
+                    <div id="additionalLanguages"></div>
                 </div>
             </div>
         </div>
@@ -283,7 +316,243 @@
         </div>
     </main>
 
+    <!-- Add Language Modal -->
+    <div class="modal" id="languageModal" style="display: none;">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3>Add New Language</h3>
+                <button class="close-btn" onclick="closeLanguageModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Select Language</label>
+                    <select class="form-select" id="newLanguage">
+                        <option value="">-- Choose a language --</option>
+                        <option value="en">English (EN)</option>
+                        <option value="zh">Chinese (中文)</option>
+                        <option value="ja">Japanese (日本語)</option>
+                        <option value="ko">Korean (한국어)</option>
+                        <option value="fr">French (Français)</option>
+                        <option value="de">German (Deutsch)</option>
+                        <option value="es">Spanish (Español)</option>
+                        <option value="ru">Russian (Русский)</option>
+                        <option value="th">Thai (ไทย)</option>
+                        <option value="id">Indonesian (Bahasa)</option>
+                        <option value="ms">Malay (Bahasa Melayu)</option>
+                        <option value="ar">Arabic (العربية)</option>
+                        <option value="it">Italian (Italiano)</option>
+                        <option value="pt">Portuguese (Português)</option>
+                    </select>
+                </div>
+                <div class="alert alert-info" style="margin-top: 16px;">
+                    <i class="fas fa-info-circle"></i>
+                    <span>After adding a language, you'll need to translate all content sections.</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeLanguageModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveLanguage()">
+                    <i class="fas fa-plus"></i> Add Language
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Language Confirmation Modal -->
+    <div class="modal" id="deleteLanguageModal" style="display: none;">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header" style="background: #fef2f2; border-bottom: 2px solid #fecaca;">
+                <h3 style="color: #dc2626; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Delete Language - Warning</span>
+                </h3>
+                <button class="close-btn" onclick="closeDeleteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert" style="background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; margin-bottom: 20px;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 20px;"></i>
+                    <div>
+                        <strong>⚠️ This action cannot be undone!</strong>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <p style="font-size: 16px; font-weight: 600; color: #0f172a; margin-bottom: 12px;">
+                        Are you sure you want to delete <strong id="deleteLangName" style="color: #dc2626;"></strong>?
+                    </p>
+                    <p style="color: #64748b; margin-bottom: 16px;">
+                        This will permanently remove:
+                    </p>
+                </div>
+
+                <div style="background: #f8fafc; border-left: 4px solid #dc2626; padding: 16px; border-radius: 4px;">
+                    <ul style="margin: 0; padding-left: 20px; color: #475569;">
+                        <li style="margin-bottom: 8px;"><strong>❌ All hotel introduction content</strong> in this language</li>
+                        <li style="margin-bottom: 8px;"><strong>❌ All room descriptions and details</strong> in this language</li>
+                        <li style="margin-bottom: 8px;"><strong>❌ All restaurant/dining information</strong> in this language</li>
+                        <li style="margin-bottom: 8px;"><strong>❌ All facilities descriptions</strong> in this language</li>
+                        <li style="margin-bottom: 8px;"><strong>❌ All policies and rules content</strong> in this language</li>
+                        <li style="margin-bottom: 8px;"><strong>❌ All other translated content</strong> in this language</li>
+                    </ul>
+                </div>
+
+                <div class="alert alert-info" style="margin-top: 20px; margin-bottom: 0;">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Visitors will no longer be able to view your website in this language.</span>
+                </div>
+            </div>
+            <div class="modal-footer" style="background: #f8fafc;">
+                <button class="btn btn-secondary" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="btn btn-danger" onclick="confirmDeleteLanguage()" style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-trash"></i>
+                    <span>Yes, Delete This Language</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Language Management
+        let additionalLanguages = [];
+        let languageToDelete = null; // Store language to delete
+
+        function addLanguage() {
+            document.getElementById('languageModal').style.display = 'flex';
+        }
+
+        function closeLanguageModal() {
+            document.getElementById('languageModal').style.display = 'none';
+            document.getElementById('newLanguage').value = '';
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteLanguageModal').style.display = 'none';
+            languageToDelete = null;
+        }
+
+        function saveLanguage() {
+            const select = document.getElementById('newLanguage');
+            const langCode = select.value;
+            const langName = select.options[select.selectedIndex].text;
+
+            if (!langCode) {
+                alert('Please select a language');
+                return;
+            }
+
+            // Check if language already exists
+            if (additionalLanguages.find(l => l.code === langCode)) {
+                alert('This language has already been added');
+                return;
+            }
+
+            // Add to array
+            additionalLanguages.push({
+                code: langCode,
+                name: langName,
+                active: true
+            });
+
+            // Render list
+            renderAdditionalLanguages();
+
+            // Save to localStorage
+            localStorage.setItem('additional_languages', JSON.stringify(additionalLanguages));
+
+            // Close modal
+            closeLanguageModal();
+
+            // Show success
+            showSuccessAlert('Language added successfully!');
+        }
+
+        function removeLanguage(langCode) {
+            const lang = additionalLanguages.find(l => l.code === langCode);
+            if (!lang) return;
+            
+            // Store language to delete
+            languageToDelete = langCode;
+            
+            // Show delete confirmation modal
+            document.getElementById('deleteLangName').textContent = lang.name;
+            document.getElementById('deleteLanguageModal').style.display = 'flex';
+        }
+
+        function confirmDeleteLanguage() {
+            if (!languageToDelete) return;
+
+            const lang = additionalLanguages.find(l => l.code === languageToDelete);
+            
+            // Remove language
+            additionalLanguages = additionalLanguages.filter(l => l.code !== languageToDelete);
+            localStorage.setItem('additional_languages', JSON.stringify(additionalLanguages));
+            renderAdditionalLanguages();
+            
+            // Close modal
+            closeDeleteModal();
+            
+            // Show success
+            showSuccessAlert(`Language "${lang.name}" has been removed successfully!`);
+        }
+
+        function toggleLanguage(langCode) {
+            const lang = additionalLanguages.find(l => l.code === langCode);
+            if (lang) {
+                lang.active = !lang.active;
+                localStorage.setItem('additional_languages', JSON.stringify(additionalLanguages));
+                renderAdditionalLanguages();
+            }
+        }
+
+        function renderAdditionalLanguages() {
+            const container = document.getElementById('additionalLanguages');
+            
+            if (additionalLanguages.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #94a3b8;">
+                        <i class="fas fa-language" style="font-size: 48px; margin-bottom: 12px;"></i>
+                        <p>No additional languages added yet.</p>
+                        <p style="font-size: 14px;">Click "Add Language" to support more languages.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = additionalLanguages.map(lang => `
+                <div class="language-item" style="display: flex; align-items: center; justify-content: space-between; padding: 16px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; background: white;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <i class="fas fa-globe" style="color: #3b82f6; font-size: 20px;"></i>
+                        <div>
+                            <div style="font-weight: 600; color: #0f172a;">${lang.name}</div>
+                            <div style="font-size: 12px; color: #64748b;">Language Code: ${lang.code.toUpperCase()}</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span class="badge" style="background: ${lang.active ? '#10b981' : '#94a3b8'}; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px;">
+                            ${lang.active ? 'Active' : 'Inactive'}
+                        </span>
+                        <label class="toggle-switch" style="margin: 0;">
+                            <input type="checkbox" ${lang.active ? 'checked' : ''} onchange="toggleLanguage('${lang.code}')">
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <button class="btn btn-danger" onclick="removeLanguage('${lang.code}')" title="Delete this language" style="padding: 8px 16px; display: flex; align-items: center; gap: 6px;">
+                            <i class="fas fa-trash"></i>
+                            <span>Delete</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showSuccessAlert(message) {
+            const alert = document.getElementById('successAlert');
+            alert.querySelector('span').textContent = message;
+            alert.classList.remove('hidden');
+            setTimeout(() => alert.classList.add('hidden'), 3000);
+        }
+
         function saveSettings() {
             // Collect all settings
             const settings = {
@@ -334,6 +603,16 @@
 
         // Load saved settings
         window.addEventListener('DOMContentLoaded', () => {
+            // Load additional languages
+            const savedLangs = localStorage.getItem('additional_languages');
+            if (savedLangs) {
+                additionalLanguages = JSON.parse(savedLangs);
+                renderAdditionalLanguages();
+            } else {
+                renderAdditionalLanguages();
+            }
+
+            // Load other settings
             const saved = localStorage.getItem('hotel_settings');
             if (saved) {
                 const settings = JSON.parse(saved);

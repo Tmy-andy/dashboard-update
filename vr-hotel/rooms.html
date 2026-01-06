@@ -117,7 +117,7 @@
                     <!-- Vietnamese Content -->
                     <div class="lang-content active" id="lang-vi">
                         <div class="form-group">
-                            <label class="form-label">Room Name (VI) <span class="required">*</span></label>
+                            <label class="form-label">Room Name (VI)</label>
                             <input type="text" class="form-input" id="nameVi" placeholder="VD: Phòng Deluxe Hướng Biển">
                         </div>
                         <div class="form-group">
@@ -129,7 +129,7 @@
                     <!-- English Content -->
                     <div class="lang-content" id="lang-en">
                         <div class="form-group">
-                            <label class="form-label">Room Name (EN) <span class="required">*</span></label>
+                            <label class="form-label">Room Name (EN)</label>
                             <input type="text" class="form-input" id="nameEn" placeholder="E.g: Deluxe Ocean View">
                         </div>
                         <div class="form-group">
@@ -167,6 +167,21 @@
                         <label class="form-label"><i class="fas fa-vr-cardboard"></i> Link VR360 Panorama</label>
                         <input type="url" class="form-input" id="vrLink" placeholder="https://example.com/room-vr.jpg">
                         <p class="form-help">Nhập URL ảnh panorama 360° của phòng</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-images"></i> Room Images</label>
+                        <div class="image-upload-area" id="imageUploadArea">
+                            <div class="upload-placeholder">
+                                <i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: #cbd5e1; margin-bottom: 10px;"></i>
+                                <p style="color: #64748b; margin: 0;">Click to upload or drag and drop images</p>
+                                <p style="color: #94a3b8; font-size: 12px; margin-top: 5px;">PNG, JPG, WEBP (max. 5MB each)</p>
+                            </div>
+                            <input type="file" id="roomImages" accept="image/*" multiple style="display: none;">
+                        </div>
+                        <div id="imagePreviewContainer" class="image-preview-grid" style="margin-top: 15px; display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px;">
+                            <!-- Image previews will be added here -->
+                        </div>
                     </div>
 
                     <div class="form-group">
